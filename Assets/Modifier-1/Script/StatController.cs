@@ -16,6 +16,7 @@ public class StatController : MonoBehaviour
     // ModuleModController moduleModController;
     public PlayerShipConfig playerShipConfig;
     public PlayerShipConfig test;
+    public GameObject gm;
     // Start is called before the first frame update
 
     protected virtual void Awake()
@@ -27,10 +28,11 @@ public class StatController : MonoBehaviour
             initialized?.Invoke();
         }
 
-        if(test == null)
+        if (test == null)
         {
             Debug.Log("null");
         }
+        Debug.Log("Scene start");
     }
 
     private void OnDestroy()
