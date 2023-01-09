@@ -15,9 +15,6 @@ public class StatController : MonoBehaviour
     public event Action unInitialized;
     // ModuleModController moduleModController;
     public PlayerShipConfig playerShipConfig;
-    public PlayerShipConfig test;
-    public GameObject gm;
-    // Start is called before the first frame update
 
     protected virtual void Awake()
     {
@@ -27,12 +24,18 @@ public class StatController : MonoBehaviour
             m_IsInitialized = true;
             initialized?.Invoke();
         }
+        // EquipModule();
+        // PlayerShipConfig test = ScriptableObject.CreateInstance<PlayerShipConfig>();
 
-        if (test == null)
-        {
-            Debug.Log("null");
-        }
-        Debug.Log("Scene start");
+        // if (test == null)
+        // {
+        //     Debug.Log("null");
+        // }
+        // else
+        // {
+        //     EquipModule();
+        // }
+        // Debug.Log("Scene start");
     }
 
     private void OnDestroy()
@@ -85,15 +88,16 @@ public class StatController : MonoBehaviour
         // {
         //     Debug.Log("Null11");
         // }
-        foreach (ModuleMod mod in test.moduleModList)
+
+        foreach (ModuleMod mod in playerShipConfig.moduleModList)
         {
-            Debug.Log("A");
+            Debug.Log("moduleModList");
             foreach (StatForModule modStat in mod.stat)
             {
-                Debug.Log("B");
+                Debug.Log("mod.stat");
                 foreach (KeyValuePair<string, Stat> pair in stats) // ใช้ใน ModuleMod ตัว Module mod จะให้ใส่ Stat scriptableObject ลงไป อยากเพิ่มตัวไหนก็ใส่ลงไป 
                 {
-                    Debug.Log("C");
+                    Debug.Log("stats");
                     string key = pair.Key;
                     Stat stat = stats[key];
                     if (modStat.statName == pair.Key)
