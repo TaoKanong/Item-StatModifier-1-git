@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
-public class StatController : MonoBehaviour
+public class StatController : Singleton<StatController>
 {
     [SerializeField] private StatDatabase m_StatDatabase;
     [SerializeField] Dictionary<string, Stat> m_Stats = new Dictionary<string, Stat>(StringComparer.OrdinalIgnoreCase);
@@ -16,26 +16,15 @@ public class StatController : MonoBehaviour
     // ModuleModController moduleModController;
     public PlayerShipConfig playerShipConfig;
 
-    protected virtual void Awake()
+    protected override void Awake()
     {
+        base.Awake();
         if (!m_IsInitialized)
         {
             Initialize();
             m_IsInitialized = true;
             initialized?.Invoke();
         }
-        // EquipModule();
-        // PlayerShipConfig test = ScriptableObject.CreateInstance<PlayerShipConfig>();
-
-        // if (test == null)
-        // {
-        //     Debug.Log("null");
-        // }
-        // else
-        // {
-        //     EquipModule();
-        // }
-        // Debug.Log("Scene start");
     }
 
     private void OnDestroy()
@@ -63,18 +52,9 @@ public class StatController : MonoBehaviour
     }
     void Start()
     {
-        // foreach (ModuleMod mod in moduleModController.moduleModList)
-        // {
-        //     foreach (StatForModule modStat in mod.stat)
-        //     {
-        //         Debug.Log(modStat.statName);
-        //     }
-        //     // Debug.Log(mod.stat);
-        // }
-        // EquipModule();
+
     }
 
-    // Update is called once per frame
     void Update()
     {
 
@@ -82,13 +62,6 @@ public class StatController : MonoBehaviour
 
     public void EquipModule() // Apply List module to statmodifier
     {
-        // Debug.Log(moduleModController.moduleModList.Count);
-        // float value = 0;
-        // if (moduleModController.m_StatDatabase == null)
-        // {
-        //     Debug.Log("Null11");
-        // }
-
         foreach (ModuleMod mod in playerShipConfig.moduleModList)
         {
             Debug.Log("moduleModList");
@@ -115,33 +88,6 @@ public class StatController : MonoBehaviour
                 }
             }
         }
-
-        // for (int i = 0; i < moduleModController.moduleModList.Count; i++)
-        // {
-        //     for (int j = 0; j < moduleModController.moduleModList[i].stat.Count; j++)
-        //     {
-        //         foreach (KeyValuePair<string, Stat> pair in stats) // ใช้ใน ModuleMod ตัว Module mod จะให้ใส่ Stat scriptableObject ลงไป อยากเพิ่มตัวไหนก็ใส่ลงไป 
-        //         {
-        //             string key = pair.Key;
-        //             Stat stat = stats[key];
-
-        //             string modStat = moduleModController.moduleModList[i].stat[j].statName;
-        //             float modMagnitude = moduleModController.moduleModList[i].stat[j].magnitude;
-        //             if (modStat == pair.Key)
-        //             {
-        //                 // modStat.Source = RandomGameObject();
-        //                 stat.AddModifier(new StatModifier
-        //                 {
-        //                     source = RandomGameObject(),
-        //                     magnitude = modMagnitude,
-        //                     Type = ModifierOperationType.Additive
-        //                 });
-        //             }
-        //         }
-        //     }
-        // }
-
-
     }
 
 

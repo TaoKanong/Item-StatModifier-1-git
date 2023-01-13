@@ -16,9 +16,9 @@ public class ModuleModController : MonoBehaviour
     // [Space(10)]
     public ModuleMod mod;
     public ItemBehaviour itemBehaviour;
+
     void Start()
     {
-        // statController = GetComponent<StatController>();
     }
 
     void Update()
@@ -41,7 +41,6 @@ public class ModuleModController : MonoBehaviour
         }
     }
 }
-
 
 [System.Serializable]
 public struct MyStruct

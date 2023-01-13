@@ -9,19 +9,31 @@ public enum CurrentInventory
     Ship,
 }
 
-public class InventorySystem : MonoBehaviour
+public class InventorySystem : Singleton<InventorySystem>
 {
     // Start is called before the first frame update
-    public ModuleInventoryDatabase playerModuleDatabase;
-    public ModuleInventoryDatabase playerWeaponDatabase;
+    [Tooltip("Scriptable object database contain module")]
+    [Header("Inventory Database")]
+    [Space(10)]
+    public InventoryDatabase playerDatabase;
+    [Space(15)]
     // public WeaponInventoryDatabase playerWeaponDatabase;
+    [Header("UI Prefab for module")]
+    [Space(10)]
     [SerializeField] private GameObject m_ModulePrefab;
+    [Space(15)]
+    [Header("UI Gameobject")]
+    [Space(10)]
     [SerializeField] private GameObject m_InventoryUI;
     [SerializeField] private GameObject m_WeaponEquipment;
     [SerializeField] private GameObject m_ModuleEquipmentUI;
     private ModuleModController moduleModController;
     public List<GameObject> currItem = new List<GameObject>();
     public CurrentInventory currentInventory;
+    protected override void Awake()
+    {
+        base.Awake();
+    }
     void Start()
     {
         Initialize();
@@ -30,15 +42,16 @@ public class InventorySystem : MonoBehaviour
     void Initialize()
     {
         currentInventory = CurrentInventory.Module;
-        foreach (ModuleMod mod in playerModuleDatabase.playerModuleInventory)
+        foreach (ModuleInventoryDatabaseDefinition mod in playerDatabase.playerModuleInventory)
         {
             GameObject newObj = Instantiate(m_ModulePrefab);
             moduleModController = newObj.GetComponent<ModuleModController>();
-            moduleModController.mod = mod;
+            moduleModController.mod = mod.mod;
             moduleModController.itemBehaviour = ItemBehaviour.Equip;
 
             currItem.Add(newObj);
-            newObj.transform.SetParent(m_InventoryUI.transform, m_InventoryUI.transform.parent);
+            newObj.transform.SetParent(m_InventoryUI.transform);
+            ResizeToStandard(newObj);
         }
     }
 
@@ -48,30 +61,22 @@ public class InventorySystem : MonoBehaviour
 
     }
 
+    public void AddItem(ModuleMod item)
+    {
+        playerDatabase.AddData(item);
+        GenerateModuleItemUI();
+    }
+
+    // public void AddItem(Weapon item)
+    // {
+    //     playerDatabase.AddData(item);
+    // }
+
     public void SelectModule()
     {
         if (currentInventory == CurrentInventory.Weapon)
         {
-            if (currItem.Count > 0)
-            {
-                for (int i = 0; i < currItem.Count; i++)
-                {
-                    Destroy(currItem[i]);
-                }
-                currItem.Clear();
-            }
-
-            foreach (ModuleMod mod in playerModuleDatabase.playerModuleInventory)
-            {
-                GameObject newObj = Instantiate(m_ModulePrefab);
-                moduleModController = newObj.GetComponent<ModuleModController>();
-                moduleModController.mod = mod;
-                moduleModController.itemBehaviour = ItemBehaviour.Equip;
-
-                currItem.Add(newObj);
-                newObj.transform.SetParent(m_InventoryUI.transform, m_InventoryUI.transform.parent);
-            }
-
+            GenerateModuleItemUI();
             currentInventory = CurrentInventory.Module;
         }
     }
@@ -80,27 +85,57 @@ public class InventorySystem : MonoBehaviour
     {
         if (currentInventory == CurrentInventory.Module)
         {
-            if (currItem.Count > 0)
-            {
-                for (int i = 0; i < currItem.Count; i++)
-                {
-                    Destroy(currItem[i]);
-                }
-                currItem.Clear();
-            }
-
-            foreach (ModuleMod mod in playerWeaponDatabase.playerModuleInventory)
-            {
-                GameObject newObj = Instantiate(m_ModulePrefab);
-                moduleModController = newObj.GetComponent<ModuleModController>();
-                moduleModController.mod = mod;
-                moduleModController.itemBehaviour = ItemBehaviour.Equip;
-
-                currItem.Add(newObj);
-                newObj.transform.SetParent(m_InventoryUI.transform, m_InventoryUI.transform.parent);
-            }
-
+            GenerateWeaponItemUI();
             currentInventory = CurrentInventory.Weapon;
         }
+    }
+
+    void ClearUIGameObject()
+    {
+        if (currItem.Count > 0)
+        {
+            for (int i = 0; i < currItem.Count; i++)
+            {
+                Destroy(currItem[i]);
+            }
+            currItem.Clear();
+        }
+    }
+
+    void GenerateModuleItemUI()
+    {
+        ClearUIGameObject();
+        foreach (ModuleInventoryDatabaseDefinition mod in playerDatabase.playerModuleInventory)
+        {
+            GameObject newObj = Instantiate(m_ModulePrefab);
+            moduleModController = newObj.GetComponent<ModuleModController>();
+            moduleModController.mod = mod.mod;
+            moduleModController.itemBehaviour = ItemBehaviour.Equip;
+
+            currItem.Add(newObj);
+            newObj.transform.SetParent(m_InventoryUI.transform, m_InventoryUI.transform.parent);
+            ResizeToStandard(newObj);
+        }
+    }
+
+    void GenerateWeaponItemUI()
+    {
+        ClearUIGameObject();
+        foreach (ModuleInventoryDatabaseDefinition mod in playerDatabase.playerWeaponInventroy)
+        {
+            GameObject newObj = Instantiate(m_ModulePrefab);
+            moduleModController = newObj.GetComponent<ModuleModController>();
+            moduleModController.mod = mod.mod;
+            moduleModController.itemBehaviour = ItemBehaviour.Equip;
+
+            currItem.Add(newObj);
+            newObj.transform.SetParent(m_InventoryUI.transform, m_InventoryUI.transform.parent);
+            ResizeToStandard(newObj);
+        }
+    }
+
+    void ResizeToStandard(GameObject obj)
+    {
+        obj.transform.localScale = new Vector3(1, 1, 1);
     }
 }
