@@ -1,4 +1,6 @@
 using System.Collections;
+using System;
+using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -17,6 +19,10 @@ public class InventorySystem : Singleton<InventorySystem>
     [Space(10)]
     public InventoryDatabase playerDatabase;
     [Space(15)]
+
+    [Header("PlayerConfig")]
+    [Space(10)]
+    public PlayerShipConfig playerShipConfig;
     // public WeaponInventoryDatabase playerWeaponDatabase;
     [Header("UI Prefab for module")]
     [Space(10)]
@@ -30,6 +36,9 @@ public class InventorySystem : Singleton<InventorySystem>
     private ModuleModController moduleModController;
     public List<GameObject> currItem = new List<GameObject>();
     public CurrentInventory currentInventory;
+    public event Action equipModule;
+    public delegate void RemoveStatModule(ModuleMod moduleMod, int id); // ใช้กับ Statcontroller remove stat module
+    public event RemoveStatModule unEquipModule;
     protected override void Awake()
     {
         base.Awake();
@@ -42,17 +51,7 @@ public class InventorySystem : Singleton<InventorySystem>
     void Initialize()
     {
         currentInventory = CurrentInventory.Module;
-        foreach (ModuleInventoryDatabaseDefinition mod in playerDatabase.playerModuleInventory)
-        {
-            GameObject newObj = Instantiate(m_ModulePrefab);
-            moduleModController = newObj.GetComponent<ModuleModController>();
-            moduleModController.mod = mod.mod;
-            moduleModController.itemBehaviour = ItemBehaviour.Equip;
-
-            currItem.Add(newObj);
-            newObj.transform.SetParent(m_InventoryUI.transform);
-            ResizeToStandard(newObj);
-        }
+        GenerateModuleItemUI();
     }
 
     // Update is called once per frame
@@ -105,11 +104,42 @@ public class InventorySystem : Singleton<InventorySystem>
     void GenerateModuleItemUI()
     {
         ClearUIGameObject();
-        foreach (ModuleInventoryDatabaseDefinition mod in playerDatabase.playerModuleInventory)
+        foreach (ModuleInventoryDefinition mod in playerDatabase.playerModuleInventory)
         {
             GameObject newObj = Instantiate(m_ModulePrefab);
             moduleModController = newObj.GetComponent<ModuleModController>();
             moduleModController.mod = mod.mod;
+            moduleModController.id = mod.id;
+            moduleModController.itemBehaviour = ItemBehaviour.Equip;
+
+            currItem.Add(newObj);
+            newObj.transform.SetParent(m_InventoryUI.transform, m_InventoryUI.transform.parent);
+            ResizeToStandard(newObj);
+        }
+
+        foreach (ModuleInventoryDefinition mod in playerShipConfig.moduleModList)
+        {
+            GameObject newObj = Instantiate(m_ModulePrefab);
+            moduleModController = newObj.GetComponent<ModuleModController>();
+            moduleModController.mod = mod.mod;
+            moduleModController.id = mod.id;
+            moduleModController.itemBehaviour = ItemBehaviour.Remove;
+
+            currItem.Add(newObj);
+            newObj.transform.SetParent(m_ModuleEquipmentUI.transform, m_ModuleEquipmentUI.transform.parent);
+            ResizeToStandard(newObj);
+        }
+    }
+
+    void GenerateWeaponItemUI()
+    {
+        ClearUIGameObject();
+        foreach (ModuleInventoryDefinition mod in playerDatabase.playerWeaponInventroy)
+        {
+            GameObject newObj = Instantiate(m_ModulePrefab);
+            moduleModController = newObj.GetComponent<ModuleModController>();
+            moduleModController.mod = mod.mod;
+            moduleModController.id = mod.id;
             moduleModController.itemBehaviour = ItemBehaviour.Equip;
 
             currItem.Add(newObj);
@@ -118,19 +148,34 @@ public class InventorySystem : Singleton<InventorySystem>
         }
     }
 
-    void GenerateWeaponItemUI()
+    public void EquipModule(int id, ModuleMod mod, ItemBehaviour itemBehaviour) // Database to shipconfig
     {
-        ClearUIGameObject();
-        foreach (ModuleInventoryDatabaseDefinition mod in playerDatabase.playerWeaponInventroy)
-        {
-            GameObject newObj = Instantiate(m_ModulePrefab);
-            moduleModController = newObj.GetComponent<ModuleModController>();
-            moduleModController.mod = mod.mod;
-            moduleModController.itemBehaviour = ItemBehaviour.Equip;
+        playerShipConfig.AddModule(id, mod, itemBehaviour);
+        ChangePositionItemUI(id, itemBehaviour);
+        GenerateModuleItemUI();
+        equipModule?.Invoke();
+    }
 
-            currItem.Add(newObj);
-            newObj.transform.SetParent(m_InventoryUI.transform, m_InventoryUI.transform.parent);
-            ResizeToStandard(newObj);
+    public void UnEquipModule(int id, ModuleMod mod, ItemBehaviour itemBehaviour) // shipconfig to database
+    {
+        playerDatabase.AddData(mod);
+        ChangePositionItemUI(id, itemBehaviour);
+        GenerateModuleItemUI();
+        // StatController.Instance.RemoveStatModule()
+        unEquipModule(mod, id);
+    }
+
+    void ChangePositionItemUI(int id, ItemBehaviour itemBehaviour)
+    {
+        if (itemBehaviour == ItemBehaviour.Equip)
+        {
+            playerDatabase.playerModuleInventory = playerDatabase.playerModuleInventory.Where(x => x.id != id).ToList();
+            GenerateModuleItemUI();
+        }
+        else
+        {
+            playerShipConfig.moduleModList = playerShipConfig.moduleModList.Where(x => x.id != id).ToList();
+            GenerateModuleItemUI();
         }
     }
 

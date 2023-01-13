@@ -11,6 +11,7 @@ public enum ModifierOperationType
 
 public class StatModifier
 {
+    public int id { get; set; }
     public Object source { get; set; }
     public float magnitude { get; set; }
     public ModifierOperationType Type { get; set; }

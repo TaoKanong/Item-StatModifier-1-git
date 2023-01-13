@@ -15,3 +15,5 @@ MonoBehaviour:
   stat:
   - statDefinition: {fileID: 11400000, guid: e33916afcf6288f4da2964a571ef148b, type: 2}
     magnitude: 20
+  - statDefinition: {fileID: 11400000, guid: 6b633db5ff314384fa23bcfb97523209, type: 2}
+    magnitude: 10

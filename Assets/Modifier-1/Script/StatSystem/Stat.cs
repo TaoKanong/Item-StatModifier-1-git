@@ -34,8 +34,19 @@ public class Stat
     public void RemoveModifierFromSource(Object source)
     {
         statModifiers = statModifiers.Where(x => x.source.GetInstanceID() != source.GetInstanceID()).ToList();
-        Debug.Log(statModifiers.Count);
+        // Debug.Log(statModifiers.Count);
         CalculateValue();
+    }
+
+    public void RemoveModifierByID(int id)
+    {
+        statModifiers = statModifiers.Where(x => x.id != id).ToList();
+        CalculateValue();
+    }
+
+    public void ClearModifier()
+    {
+        statModifiers.Clear();
     }
 
     protected void CalculateValue()

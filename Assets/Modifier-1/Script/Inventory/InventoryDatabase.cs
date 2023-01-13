@@ -6,13 +6,13 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "StatSystem/Database", fileName = "Database", order = 0)]
 public class InventoryDatabase : ScriptableObject
 {
-    public List<ModuleInventoryDatabaseDefinition> playerModuleInventory;
-    public List<ModuleInventoryDatabaseDefinition> playerWeaponInventroy;
+    public List<ModuleInventoryDefinition> playerModuleInventory;
+    public List<ModuleInventoryDefinition> playerWeaponInventroy;
     public void AddData(ModuleMod newMod)
     {
         if (playerModuleInventory.Count == 0)
         {
-            playerModuleInventory.Add(new ModuleInventoryDatabaseDefinition
+            playerModuleInventory.Add(new ModuleInventoryDefinition
             {
                 id = 0,
                 mod = newMod
@@ -20,10 +20,10 @@ public class InventoryDatabase : ScriptableObject
         }
         else
         {
-            ModuleInventoryDatabaseDefinition lastElement = playerModuleInventory.Last();
+            ModuleInventoryDefinition lastElement = playerModuleInventory.Last();
             int newId = lastElement.id + 1;
 
-            playerModuleInventory.Add(new ModuleInventoryDatabaseDefinition
+            playerModuleInventory.Add(new ModuleInventoryDefinition
             {
                 id = newId,
                 mod = newMod
@@ -39,45 +39,20 @@ public class InventoryDatabase : ScriptableObject
     //         mod = newMod
     //     });
     // }
-
-    private int GenerateID()
-    {
-        if (playerModuleInventory.Count == 0)
-        {
-            int finalValue = 0 + 1;
-            int newValue = 0;
-            for (int i = 0; i < playerModuleInventory.Count; i++)
-            {
-                int currID = playerModuleInventory[i].id;
-                int nextID = playerModuleInventory[i + 1].id;
-
-                if (currID < nextID)
-                {
-                    newValue = nextID;
-                }
-
-                if (currID > newValue)
-                {
-                    finalValue = currID;
-                }
-
-            }
-            return finalValue;
-        }
-        return 0;
-    }
 }
 
 [System.Serializable]
-public class ModuleInventoryDatabaseDefinition
+public class ModuleInventoryDefinition
 {
     public int id;
     public ModuleMod mod;
+    public ItemBehaviour itemBehaviour;
 }
 
 [System.Serializable]
-public class WeaponInventoryDatabaseDefinition
+public class WeaponInventoryDefinition
 {
     public int id;
     public ModuleMod mod;
+    public ItemBehaviour itemBehaviour;
 }

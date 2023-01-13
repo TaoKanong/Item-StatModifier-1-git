@@ -1,10 +1,46 @@
 using System.Collections;
+using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(menuName = "StatSystem/PlayerShipConfig", fileName = "PlayerShipConfig", order = 0)]
 public class PlayerShipConfig : ScriptableObject
 {
-    public List<ModuleMod> moduleModList;
+    public List<ModuleInventoryDefinition> moduleModList;
 
+    public void AddModule(int id, ModuleMod newMod, ItemBehaviour itemBehaviour)
+    {
+        // ต้อง check slot ของ ยานก่อน Add ด้วย
+        // moduleModList.Add(new ModuleInventoryDefinition
+        // {
+        //     id = id,
+        //     mod = mod,
+        //     itemBehaviour = ItemBehaviour.Remove
+        // });
+
+        if (moduleModList.Count == 0)
+        {
+            moduleModList.Add(new ModuleInventoryDefinition
+            {
+                id = 0,
+                mod = newMod
+            });
+        }
+        else
+        {
+            ModuleInventoryDefinition lastElement = moduleModList.Last();
+            int newId = lastElement.id + 1;
+
+            moduleModList.Add(new ModuleInventoryDefinition
+            {
+                id = newId,
+                mod = newMod
+            });
+        }
+    }
+
+    public void AddData(ModuleMod newMod)
+    {
+
+    }
 }

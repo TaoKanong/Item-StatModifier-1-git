@@ -14,11 +14,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerModuleInventory:
   - id: 0
-    mod: {fileID: 11400000, guid: 12c71ba459a495b4ca8ea726c6d181b1, type: 2}
-  - id: 1
-    mod: {fileID: 11400000, guid: 12c71ba459a495b4ca8ea726c6d181b1, type: 2}
+    mod: {fileID: 11400000, guid: 358f090122d8a61488cfe6333ea53373, type: 2}
+    itemBehaviour: 0
   - id: 2
     mod: {fileID: 11400000, guid: 12c71ba459a495b4ca8ea726c6d181b1, type: 2}
+    itemBehaviour: 0
   playerWeaponInventroy:
   - id: 0
     mod: {fileID: 11400000, guid: 12c71ba459a495b4ca8ea726c6d181b1, type: 2}
+    itemBehaviour: 0

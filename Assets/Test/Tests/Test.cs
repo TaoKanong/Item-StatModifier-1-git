@@ -39,7 +39,6 @@ public class Test : MonoBehaviour
 
         // physicalAttack.AddModifier(tempMod);
 
-        statController.EquipModule();
         Assert.AreEqual(25f, physicalAttack.value);
         // Assert.AreEqual(10, magicDefense.value);
         // physicalAttack.AddModifier(new StatModifier
