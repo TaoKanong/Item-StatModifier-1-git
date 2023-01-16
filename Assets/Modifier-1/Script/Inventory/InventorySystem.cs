@@ -14,6 +14,7 @@ public enum CurrentInventory
 public class InventorySystem : Singleton<InventorySystem>
 {
     // Start is called before the first frame update
+
     [Tooltip("Scriptable object database contain module")]
     [Header("Inventory Database")]
     [Space(10)]
@@ -33,12 +34,16 @@ public class InventorySystem : Singleton<InventorySystem>
     [SerializeField] private GameObject m_InventoryUI;
     [SerializeField] private GameObject m_WeaponEquipment;
     [SerializeField] private GameObject m_ModuleEquipmentUI;
+    [SerializeField] private List<GameObject> m_Postion = new List<GameObject>();
     private ModuleModController moduleModController;
-    public List<GameObject> currItem = new List<GameObject>();
-    public CurrentInventory currentInventory;
+    public List<GameObject> currInventoryItem = new List<GameObject>();
+    public List<GameObject> currEquipmentItem = new List<GameObject>();
+    public CurrentInventory currentInventory; // item topic => module, weapon
     public event Action equipModule;
     public delegate void RemoveStatModule(ModuleMod moduleMod, int id); // ใช้กับ Statcontroller remove stat module
     public event RemoveStatModule unEquipModule;
+    private ItemWorkshopUI itemWorkshopUI;
+    private bool isInitialized;
     protected override void Awake()
     {
         base.Awake();
@@ -50,8 +55,9 @@ public class InventorySystem : Singleton<InventorySystem>
 
     void Initialize()
     {
-        currentInventory = CurrentInventory.Module;
+        itemWorkshopUI = new ItemWorkshopUI(playerDatabase, playerShipConfig, m_Postion);
         GenerateModuleItemUI();
+        GenerateEquipModuleItemUI();
     }
 
     // Update is called once per frame
@@ -89,94 +95,114 @@ public class InventorySystem : Singleton<InventorySystem>
         }
     }
 
-    void ClearUIGameObject()
+    void GenerateModuleItemUI() // แยกเพราะมีหัวข้อให้เลือกแสดงข้อมูล แสดงข้อมูลไม่ได้พร้อมกัน
     {
-        if (currItem.Count > 0)
+        int idx = 0;
+        // int idx2 = 1;
+
+        RefreshItemUI(currInventoryItem);
+        while (idx < playerDatabase.playerModuleInventory.Count)
         {
-            for (int i = 0; i < currItem.Count; i++)
-            {
-                Destroy(currItem[i]);
-            }
-            currItem.Clear();
+            itemWorkshopUI.GenerateInventoryItemUI<ModuleInventoryDefinition>(InstantiatePrefabItemUI(m_ModulePrefab), idx + 1);
+            idx++;
         }
-    }
+        currInventoryItem = itemWorkshopUI.currInventoryItem;
 
-    void GenerateModuleItemUI()
-    {
-        ClearUIGameObject();
-        foreach (ModuleInventoryDefinition mod in playerDatabase.playerModuleInventory)
-        {
-            GameObject newObj = Instantiate(m_ModulePrefab);
-            moduleModController = newObj.GetComponent<ModuleModController>();
-            moduleModController.mod = mod.mod;
-            moduleModController.id = mod.id;
-            moduleModController.itemBehaviour = ItemBehaviour.Equip;
-
-            currItem.Add(newObj);
-            newObj.transform.SetParent(m_InventoryUI.transform, m_InventoryUI.transform.parent);
-            ResizeToStandard(newObj);
-        }
-
-        foreach (ModuleInventoryDefinition mod in playerShipConfig.moduleModList)
-        {
-            GameObject newObj = Instantiate(m_ModulePrefab);
-            moduleModController = newObj.GetComponent<ModuleModController>();
-            moduleModController.mod = mod.mod;
-            moduleModController.id = mod.id;
-            moduleModController.itemBehaviour = ItemBehaviour.Remove;
-
-            currItem.Add(newObj);
-            newObj.transform.SetParent(m_ModuleEquipmentUI.transform, m_ModuleEquipmentUI.transform.parent);
-            ResizeToStandard(newObj);
-        }
+        // while (idx2 < playerDatabase.playerModuleInventory.Count) 
+        // {
+        //     currInventoryItem.Add(InstantiatePrefabItemUI(m_ModulePrefab));
+        //     idx2++;
+        // }
+        // itemWorkshopUI.GenerateInventoryItemUI<ModuleInventoryDefinition>(currInventoryItem);
     }
 
     void GenerateWeaponItemUI()
     {
-        ClearUIGameObject();
-        foreach (ModuleInventoryDefinition mod in playerDatabase.playerWeaponInventroy)
-        {
-            GameObject newObj = Instantiate(m_ModulePrefab);
-            moduleModController = newObj.GetComponent<ModuleModController>();
-            moduleModController.mod = mod.mod;
-            moduleModController.id = mod.id;
-            moduleModController.itemBehaviour = ItemBehaviour.Equip;
+        int idx = 0;
 
-            currItem.Add(newObj);
-            newObj.transform.SetParent(m_InventoryUI.transform, m_InventoryUI.transform.parent);
-            ResizeToStandard(newObj);
+        RefreshItemUI(currInventoryItem);
+        while (idx < playerDatabase.playerWeaponInventroy.Count)
+        {
+            itemWorkshopUI.GenerateInventoryItemUI<WeaponInventoryDefinition>(InstantiatePrefabItemUI(m_ModulePrefab), idx + 1);
+            idx++;
+        }
+        currInventoryItem = itemWorkshopUI.currInventoryItem;
+    }
+
+    void GenerateEquipModuleItemUI() // เอาของ weapon มารวมกันได้เลย
+    {
+        RefreshItemUI(currEquipmentItem);
+        for (int i = 0; i < playerShipConfig.moduleModList.Count; i++)
+        {
+            itemWorkshopUI.GenerateEquipmentItemUI<ModuleInventoryDefinition>(InstantiatePrefabItemUI(m_ModulePrefab), i + 1);
+        }
+        currEquipmentItem = itemWorkshopUI.currEquipmentItem;
+    }
+
+    public void EquipModule(int id, ModuleMod mod, ItemBehaviour itemBehaviour) // send data inventory to shipconfig
+    {
+        currentInventory = CurrentInventory.Module;
+        playerShipConfig.AddModule(id, mod, itemBehaviour);
+        TranferData(id, itemBehaviour);
+        RemoveUI(ref currInventoryItem, id);
+        // GenerateModuleItemUI();
+        GenerateEquipModuleItemUI();
+        equipModule?.Invoke(); // invoke เพื่อ apply stat จาก statController
+    }
+
+    public void UnEquipModule(int id, ModuleMod mod, ItemBehaviour itemBehaviour) // send data shipconfig to database
+    {
+        SelectModule();
+        playerDatabase.AddData(mod);
+        TranferData(id, itemBehaviour);
+        RemoveUI(ref currEquipmentItem, id);
+        GenerateModuleItemUI();
+        unEquipModule(mod, id); // remove stat ด้วย event delgate
+    }
+
+    void RefreshItemUI(List<GameObject> list)
+    {
+        if (list.Count > 0)
+        {
+            for (int i = 0; i < list.Count; i++)
+            {
+                Destroy(list[i]);
+            }
+            list.Clear();
         }
     }
 
-    public void EquipModule(int id, ModuleMod mod, ItemBehaviour itemBehaviour) // Database to shipconfig
+    public void RemoveUI(ref List<GameObject> itemList, int id)
     {
-        playerShipConfig.AddModule(id, mod, itemBehaviour);
-        ChangePositionItemUI(id, itemBehaviour);
-        GenerateModuleItemUI();
-        equipModule?.Invoke();
+        for (int i = 0; i < itemList.Count; i++)
+        {
+            ModuleModController controller = itemList[i].GetComponent<ModuleModController>();
+            if (controller.id == id)
+            {
+                Destroy(itemList[i]);
+                itemList.RemoveAt(i);
+            }
+        }
     }
 
-    public void UnEquipModule(int id, ModuleMod mod, ItemBehaviour itemBehaviour) // shipconfig to database
-    {
-        playerDatabase.AddData(mod);
-        ChangePositionItemUI(id, itemBehaviour);
-        GenerateModuleItemUI();
-        // StatController.Instance.RemoveStatModule()
-        unEquipModule(mod, id);
-    }
-
-    void ChangePositionItemUI(int id, ItemBehaviour itemBehaviour)
+    void TranferData(int id, ItemBehaviour itemBehaviour) // ย้าย Item object ui ระหว่าง inventory database and shipconfig 
     {
         if (itemBehaviour == ItemBehaviour.Equip)
         {
             playerDatabase.playerModuleInventory = playerDatabase.playerModuleInventory.Where(x => x.id != id).ToList();
-            GenerateModuleItemUI();
+            // GenerateModuleItemUI();
         }
         else
         {
             playerShipConfig.moduleModList = playerShipConfig.moduleModList.Where(x => x.id != id).ToList();
-            GenerateModuleItemUI();
+            // GenerateModuleItemUI();
         }
+    }
+
+    public GameObject InstantiatePrefabItemUI(GameObject obj)
+    {
+        GameObject newObj = Instantiate(obj);
+        return newObj;
     }
 
     void ResizeToStandard(GameObject obj)

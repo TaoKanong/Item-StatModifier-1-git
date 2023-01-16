@@ -2,6 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+// public enum ItemCategory
+// {
+//     Module
+// }
+
 public enum ItemBehaviour
 {
     Equip,

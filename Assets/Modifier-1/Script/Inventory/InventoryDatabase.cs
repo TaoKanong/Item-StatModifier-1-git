@@ -8,6 +8,7 @@ public class InventoryDatabase : ScriptableObject
 {
     public List<ModuleInventoryDefinition> playerModuleInventory;
     public List<ModuleInventoryDefinition> playerWeaponInventroy;
+    public List<WeaponInventoryDefinition> testForWeaponInventory;
     public void AddData(ModuleMod newMod)
     {
         if (playerModuleInventory.Count == 0)

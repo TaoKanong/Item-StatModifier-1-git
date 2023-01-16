@@ -7,6 +7,7 @@ using UnityEngine;
 public class PlayerShipConfig : ScriptableObject
 {
     public List<ModuleInventoryDefinition> moduleModList;
+    // public List<>
 
     public void AddModule(int id, ModuleMod newMod, ItemBehaviour itemBehaviour)
     {
@@ -23,7 +24,8 @@ public class PlayerShipConfig : ScriptableObject
             moduleModList.Add(new ModuleInventoryDefinition
             {
                 id = 0,
-                mod = newMod
+                mod = newMod,
+                itemBehaviour = ItemBehaviour.Remove
             });
         }
         else
@@ -34,7 +36,8 @@ public class PlayerShipConfig : ScriptableObject
             moduleModList.Add(new ModuleInventoryDefinition
             {
                 id = newId,
-                mod = newMod
+                mod = newMod,
+                itemBehaviour = ItemBehaviour.Remove
             });
         }
     }
