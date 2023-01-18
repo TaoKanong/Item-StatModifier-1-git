@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+// using UnityEngine.Object;
 
 public class ItemWorkshopUI
 {
@@ -10,13 +11,12 @@ public class ItemWorkshopUI
     public InventoryDatabase playerDatabase => m_PlayerDatabase;
     protected PlayerShipConfig m_PlayerShipConfig;
     public PlayerShipConfig playerShipConfig => m_PlayerShipConfig;
-    protected GameObject m_ModulePrefab;
     private List<GameObject> m_CurrInventoryItem = new List<GameObject>();
     public List<GameObject> currInventoryItem => m_CurrInventoryItem;
-    private List<GameObject> m_CurrEquipmentItem = new List<GameObject>();
-    public List<GameObject> currEquipmentItem => m_CurrEquipmentItem;
-    private List<GameObject> m_Position = new List<GameObject>();
-    // public List<GameObject> position => m_Position;
+    private List<GameObject> m_CurrEquipmentModule = new List<GameObject>();
+    public List<GameObject> currEquipmentModule => m_CurrEquipmentModule;
+    private List<GameObject> m_CurrEquipmentWeapon = new List<GameObject>();
+    public List<GameObject> currEquipmentWeapon => m_CurrEquipmentWeapon;
 
     public ItemWorkshopUI(InventoryDatabase playerDatabase, PlayerShipConfig playerShipConfig, List<GameObject> position)
     {
@@ -29,105 +29,114 @@ public class ItemWorkshopUI
         }
     }
 
-    public void GenerateInventoryItemUI<T>(GameObject prefabGameObject, int idx) // main way
+    public void GenerateInventoryItemUI<T>(GameObject prefabGameObject, ref List<GameObject> list) // main way
     {
+        RefreshItemUI(ref list);
+
         if (typeof(T) == typeof(ModuleInventoryDefinition))
         {
-            int val = 0;
             foreach (ModuleInventoryDefinition mod in playerDatabase.playerModuleInventory)
             {
-                ModuleModController moduleModController = prefabGameObject.GetComponent<ModuleModController>();
+                GameObject newGameObject = UnityEngine.Object.Instantiate(prefabGameObject);
+                ModuleModController moduleModController = newGameObject.GetComponent<ModuleModController>();
                 moduleModController.mod = mod.mod;
                 moduleModController.id = mod.id;
                 moduleModController.itemBehaviour = ItemBehaviour.Equip;
 
-                prefabGameObject.transform.SetParent(m_PositionUI["InventoryUI"].transform, m_PositionUI["InventoryUI"].transform.parent);
-                ResizeToStandard(prefabGameObject);
-
-                val++;
-                if (idx == val) // ถ้าไม่ break loop มันจะ loop จนถึงรอบสุดท้ายตลอด ทำให้ object ที่ถูกใส่เข้ามากลายเป็นตัวสุดท้ายตลอด
-                {
-                    m_CurrInventoryItem.Add(prefabGameObject);
-                    break; //
-                }
+                newGameObject.transform.SetParent(m_PositionUI["InventoryUI"].transform, m_PositionUI["InventoryUI"].transform.parent);
+                ResizeToStandard(newGameObject);
+                m_CurrInventoryItem.Add(newGameObject);
             }
+            list = currInventoryItem;
         }
 
         else if (typeof(T) == typeof(WeaponInventoryDefinition))
         {
-            int val = 0;
-            foreach (ModuleInventoryDefinition mod in playerDatabase.playerWeaponInventroy)
+            foreach (WeaponInventoryDefinition weapon in playerDatabase.playerWeaponInventroy)
             {
-                ModuleModController moduleModController = prefabGameObject.GetComponent<ModuleModController>();
-                moduleModController.mod = mod.mod;
-                moduleModController.id = mod.id;
-                moduleModController.itemBehaviour = ItemBehaviour.Equip;
+                GameObject newGameObject = UnityEngine.Object.Instantiate(prefabGameObject);
+                WeaponController weaponController = newGameObject.GetComponent<WeaponController>();
+                weaponController.weapon = weapon.weapon;
+                weaponController.id = weapon.id;
+                weaponController.itemBehaviour = ItemBehaviour.Equip;
+                weaponController.weaponType = weapon.weapon.weaponType;
 
-                prefabGameObject.transform.SetParent(m_PositionUI["InventoryUI"].transform, m_PositionUI["InventoryUI"].transform.parent);
-                ResizeToStandard(prefabGameObject);
-
-                val++;
-                if (idx == val) // ถ้าไม่ break loop มันจะ loop จนถึงรอบสุดท้ายตลอด ทำให้ object ที่ถูกใส่เข้ามากลายเป็นตัวสุดท้ายตลอด
-                {
-                    m_CurrInventoryItem.Add(prefabGameObject);
-                    break; //
-                }
+                newGameObject.transform.SetParent(m_PositionUI["InventoryUI"].transform, m_PositionUI["InventoryUI"].transform.parent);
+                ResizeToStandard(newGameObject);
+                m_CurrInventoryItem.Add(newGameObject);
             }
+            list = currInventoryItem;
         }
 
     }
 
-    public void GenerateInventoryItemUI<T>(List<GameObject> prefabGameObject) // another way Test
+    public void GenerateEquipmentItemUI(GameObject modulePrefUI, GameObject weaponPrefUI, ref List<GameObject> moduleList, ref List<GameObject> weaponList)
     {
-        if (typeof(T) == typeof(ModuleInventoryDefinition))
+        RefreshItemUI(ref moduleList);
+        RefreshItemUI(ref weaponList);
+
+        foreach (ModuleInventoryDefinition mod in playerShipConfig.moduleModList) // 
         {
-            int val = 0;
-            int idx = 1;
-            while (idx == val)
-            {
-                foreach (ModuleInventoryDefinition mod in playerDatabase.playerModuleInventory)
-                {
-                    foreach (GameObject obj in prefabGameObject)
-                    {
-                        ModuleModController moduleModController = obj.GetComponent<ModuleModController>();
-                        moduleModController.mod = mod.mod;
-                        moduleModController.id = mod.id;
-                        moduleModController.itemBehaviour = ItemBehaviour.Equip;
+            GameObject newGameObject = UnityEngine.Object.Instantiate(modulePrefUI);
+            ModuleModController moduleModController = newGameObject.GetComponent<ModuleModController>();
+            moduleModController.mod = mod.mod;
+            moduleModController.id = mod.id;
+            moduleModController.itemBehaviour = ItemBehaviour.Remove;
 
-                        obj.transform.SetParent(m_PositionUI["InventoryUI"].transform, m_PositionUI["InventoryUI"].transform.parent);
-                        ResizeToStandard(obj);
+            newGameObject.transform.SetParent(m_PositionUI["ModuleEquipmentUI"].transform, m_PositionUI["ModuleEquipmentUI"].transform.parent);
+            ResizeToStandard(newGameObject);
+            m_CurrEquipmentModule.Add(newGameObject);
+        }
 
-                        val++;
-                        m_CurrInventoryItem.Add(obj);
-                    }
-                }
-            }
+
+
+
+        // Instantiate Primary
+        if (playerShipConfig.primaryWeapon)
+        {
+            GameObject primaryWeaponUI = UnityEngine.Object.Instantiate(weaponPrefUI);
+            WeaponController primaryWeaponProperties = primaryWeaponUI.GetComponent<WeaponController>();
+            primaryWeaponProperties.weapon = playerShipConfig.primaryWeapon;
+            primaryWeaponProperties.id = 0;
+            primaryWeaponProperties.weaponType = playerShipConfig.primaryWeapon.weaponType;
+            primaryWeaponProperties.itemBehaviour = ItemBehaviour.Remove;
+
+            primaryWeaponUI.transform.SetParent(m_PositionUI["PrimaryEquipUI"].transform, m_PositionUI["PrimaryEquipUI"].transform.parent);
+            ResizeToStandard(primaryWeaponUI);
+            m_CurrEquipmentWeapon.Add(primaryWeaponUI);
 
         }
+
+        if (playerShipConfig.secondaryWeapon)
+        {
+            // Instantiate Secondary
+            GameObject secondaryWeaponUI = UnityEngine.Object.Instantiate(weaponPrefUI);
+            WeaponController secondaryWeaponProperties = secondaryWeaponUI.GetComponent<WeaponController>();
+            secondaryWeaponProperties.weapon = playerShipConfig.secondaryWeapon;
+            secondaryWeaponProperties.id = 1;
+            secondaryWeaponProperties.weaponType = playerShipConfig.secondaryWeapon.weaponType;
+            secondaryWeaponProperties.itemBehaviour = ItemBehaviour.Remove;
+
+            secondaryWeaponUI.transform.SetParent(m_PositionUI["SecondaryEquipUI "].transform, m_PositionUI["SecondaryEquipUI "].transform.parent);
+            ResizeToStandard(secondaryWeaponUI);
+            m_CurrEquipmentWeapon.Add(secondaryWeaponUI);
+
+        }
+
+
+        moduleList = currEquipmentModule;
+        weaponList = currEquipmentWeapon;
     }
 
-    public void GenerateEquipmentItemUI<T>(GameObject prefabGameObject, int idx)
+    public void RefreshItemUI(ref List<GameObject> list)
     {
-        if (typeof(T) == typeof(ModuleInventoryDefinition))
+        if (list.Count > 0)
         {
-            int val = 0;
-            foreach (ModuleInventoryDefinition mod in playerShipConfig.moduleModList) // 
+            for (int i = 0; i < list.Count; i++)
             {
-                ModuleModController moduleModController = prefabGameObject.GetComponent<ModuleModController>();
-                moduleModController.mod = mod.mod;
-                moduleModController.id = mod.id;
-                moduleModController.itemBehaviour = ItemBehaviour.Remove;
-
-                prefabGameObject.transform.SetParent(m_PositionUI["ModuleEquipmentUI"].transform, m_PositionUI["ModuleEquipmentUI"].transform.parent);
-                ResizeToStandard(prefabGameObject);
-
-                val++;
-                if (idx == val) // ถ้าไม่ break loop มันจะ loop จนถึงรอบสุดท้ายตลอด ทำให้ object ที่ถูกใส่เข้ามากลายเป็นตัวสุดท้ายตลอด
-                {
-                    m_CurrEquipmentItem.Add(prefabGameObject);
-                    break; //
-                }
+                UnityEngine.Object.Destroy(list[i]);
             }
+            list.Clear();
         }
     }
 

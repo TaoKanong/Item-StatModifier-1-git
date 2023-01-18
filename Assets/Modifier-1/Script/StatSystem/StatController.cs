@@ -138,13 +138,20 @@ public class StatController : Singleton<StatController>
     void OnGUI()
     {
         GUI.color = Color.green;
+        int spacing = 0;
+        foreach (KeyValuePair<string, Stat> pair in stats)
+        {
+            GUI.Label(
+                new Rect(25, spacing, 200, 20),
+                pair.Key + " " + stats[pair.Key].value);
+            spacing += 15;
+        }
+        // GUI.Label(
+        //     new Rect(125, 0, 200, 20),
+        //     "PrimaryDamage: " + stats["PrimaryDamage"].value);
 
-        GUI.Label(
-            new Rect(125, 0, 200, 20),
-            "Physic Attack: " + stats["PhysicalAttack"].value);
-
-        GUI.Label(
-            new Rect(125, 15, 200, 20),
-            "AttackSpeed: " + stats["AttackSpeed"].value);
+        // GUI.Label(
+        //     new Rect(125, 15, 200, 20),
+        //     "SecondaryDamage: " + stats["SecondaryDamage"].value);
     }
 }

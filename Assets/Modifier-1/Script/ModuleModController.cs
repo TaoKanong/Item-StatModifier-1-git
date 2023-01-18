@@ -13,18 +13,20 @@ public enum ItemBehaviour
     Remove,
 }
 
-public class ModuleModController : MonoBehaviour
+public class ModuleModController : MonoBehaviour, IItemController
 {
 
     // Start is called before the first frame update
     // [Header("Add Remove module to ship")]
     // [Space(10)]
-    public int id;
+    public int id { get; set; }
+    [SerializeField] int Id; // for show only
     public ModuleMod mod;
     public ItemBehaviour itemBehaviour;
 
     void Start()
     {
+        Id = id;
     }
 
     void Update()

@@ -13,23 +13,19 @@ MonoBehaviour:
   m_Name: PlayerDatabase
   m_EditorClassIdentifier: 
   playerModuleInventory:
-  - id: 5
+  - id: 0
     mod: {fileID: 11400000, guid: 12c71ba459a495b4ca8ea726c6d181b1, type: 2}
     itemBehaviour: 0
-  - id: 6
-    mod: {fileID: 11400000, guid: 358f090122d8a61488cfe6333ea53373, type: 2}
-    itemBehaviour: 0
-  - id: 7
-    mod: {fileID: 11400000, guid: 358f090122d8a61488cfe6333ea53373, type: 2}
-    itemBehaviour: 0
-  - id: 8
+  - id: 1
     mod: {fileID: 11400000, guid: 12c71ba459a495b4ca8ea726c6d181b1, type: 2}
     itemBehaviour: 0
-  - id: 9
+  - id: 2
     mod: {fileID: 11400000, guid: 12c71ba459a495b4ca8ea726c6d181b1, type: 2}
     itemBehaviour: 0
   playerWeaponInventroy:
   - id: 0
-    mod: {fileID: 11400000, guid: 12c71ba459a495b4ca8ea726c6d181b1, type: 2}
+    weapon: {fileID: 11400000, guid: 2ab2caae2fce40e4691f1539b24f4961, type: 2}
     itemBehaviour: 0
-  testForWeaponInventory: []
+  - id: 1
+    weapon: {fileID: 11400000, guid: 2ab2caae2fce40e4691f1539b24f4961, type: 2}
+    itemBehaviour: 0

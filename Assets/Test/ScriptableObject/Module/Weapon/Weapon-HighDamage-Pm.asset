@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 560f859e84304a64a8eb64a74f17f85f, type: 3}
+  m_Name: Weapon-HighDamage-Pm
+  m_EditorClassIdentifier: 
+  statList:
+  - stat: {fileID: 11400000, guid: abfd2e5fdb1cfbd4b9aafd545382e4dc, type: 2}
+    magnitude: 20
+  - stat: {fileID: 11400000, guid: 96a7c2dbaf851894ab93d314d28387d0, type: 2}
+    magnitude: -5
+  bulletPrefab: {fileID: 0}
+  hitPrefab: {fileID: 0}
+  flashPrefab: {fileID: 0}
+  soundEffect: {fileID: 0}
+  ammoConsume: 5
+  weaponType: 0

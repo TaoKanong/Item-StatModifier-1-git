@@ -67,6 +67,11 @@ public class Stat
             {
                 newValue *= modifier.magnitude;
             }
+
+            else if (modifier.Type == ModifierOperationType.Override)
+            {
+                newValue = modifier.magnitude;
+            }
         }
 
         // if (m_statDefinition.cap >= 0)

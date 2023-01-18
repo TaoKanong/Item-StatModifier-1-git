@@ -6,6 +6,8 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "StatSystem/PlayerShipConfig", fileName = "PlayerShipConfig", order = 0)]
 public class PlayerShipConfig : ScriptableObject
 {
+    public Weapon primaryWeapon;
+    public Weapon secondaryWeapon;
     public List<ModuleInventoryDefinition> moduleModList;
     // public List<>
 
@@ -40,6 +42,20 @@ public class PlayerShipConfig : ScriptableObject
                 itemBehaviour = ItemBehaviour.Remove
             });
         }
+    }
+
+    public void AddPrimaryWeapon(Weapon weapon)
+    {
+        primaryWeapon = weapon;
+        // if(primaryWeapon == null)
+        // {
+        //     primaryWeapon = weapon;
+        // }
+    }
+
+    public void AddSecondaryWeapon(Weapon weapon)
+    {
+        secondaryWeapon = weapon;
     }
 
     public void AddData(ModuleMod newMod)

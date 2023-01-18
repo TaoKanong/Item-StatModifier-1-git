@@ -25,23 +25,29 @@ public class InventorySystem : Singleton<InventorySystem>
     [Space(10)]
     public PlayerShipConfig playerShipConfig;
     // public WeaponInventoryDatabase playerWeaponDatabase;
-    [Header("UI Prefab for module")]
+    [Header("UI Prefab")]
     [Space(10)]
     [SerializeField] private GameObject m_ModulePrefab;
+    [SerializeField] private GameObject m_WeaponPrefab;
     [Space(15)]
     [Header("UI Gameobject")]
     [Space(10)]
-    [SerializeField] private GameObject m_InventoryUI;
-    [SerializeField] private GameObject m_WeaponEquipment;
-    [SerializeField] private GameObject m_ModuleEquipmentUI;
+    // [SerializeField] private GameObject m_InventoryUI;
+    // [SerializeField] private GameObject[] m_WeaponEquipment;
+    // [SerializeField] private GameObject m_ModuleEquipmentUI;
     [SerializeField] private List<GameObject> m_Postion = new List<GameObject>();
     private ModuleModController moduleModController;
+    // private ModuleModController WeaponController;
     public List<GameObject> currInventoryItem = new List<GameObject>();
-    public List<GameObject> currEquipmentItem = new List<GameObject>();
+    public List<GameObject> currEquipmentModule = new List<GameObject>();
+    public List<GameObject> currEquipmentWeapon = new List<GameObject>();
     public CurrentInventory currentInventory; // item topic => module, weapon
     public event Action equipModule;
     public delegate void RemoveStatModule(ModuleMod moduleMod, int id); // ใช้กับ Statcontroller remove stat module
     public event RemoveStatModule unEquipModule;
+    public event Action equipWeapon;
+    public delegate void RemoveStatWeapon(Weapon weapon, int id);
+    public event RemoveStatWeapon unEquipWeapon;
     private ItemWorkshopUI itemWorkshopUI;
     private bool isInitialized;
     protected override void Awake()
@@ -56,8 +62,8 @@ public class InventorySystem : Singleton<InventorySystem>
     void Initialize()
     {
         itemWorkshopUI = new ItemWorkshopUI(playerDatabase, playerShipConfig, m_Postion);
-        GenerateModuleItemUI();
-        GenerateEquipModuleItemUI();
+        itemWorkshopUI.GenerateInventoryItemUI<ModuleInventoryDefinition>(m_ModulePrefab, ref currInventoryItem);
+        itemWorkshopUI.GenerateEquipmentItemUI(m_ModulePrefab, m_WeaponPrefab, ref currEquipmentModule, ref currEquipmentWeapon);
     }
 
     // Update is called once per frame
@@ -66,22 +72,30 @@ public class InventorySystem : Singleton<InventorySystem>
 
     }
 
+    ///<summary> Add test item data for database </summary>  
     public void AddItem(ModuleMod item)
     {
         playerDatabase.AddData(item);
-        GenerateModuleItemUI();
+        itemWorkshopUI.GenerateInventoryItemUI<ModuleInventoryDefinition>(m_ModulePrefab, ref currInventoryItem);
+        currentInventory = CurrentInventory.Module;
     }
 
-    // public void AddItem(Weapon item)
-    // {
-    //     playerDatabase.AddData(item);
-    // }
+    public void AddItem(Weapon item)
+    {
+        playerDatabase.AddData(item);
+        itemWorkshopUI.GenerateInventoryItemUI<ModuleInventoryDefinition>(m_ModulePrefab, ref currInventoryItem);
+        currentInventory = CurrentInventory.Weapon;
+    }
 
+    ///<summary> 
+    /// select category to display item 
+    /// อาจจะทำเป็น force generate สำหรับ select display ตอนนี้จะใช้งาน method ตัวนี้จะติดปัญหาเรื่อง inventory type
+    /// </summary>  
     public void SelectModule()
     {
         if (currentInventory == CurrentInventory.Weapon)
         {
-            GenerateModuleItemUI();
+            itemWorkshopUI.GenerateInventoryItemUI<ModuleInventoryDefinition>(m_ModulePrefab, ref currInventoryItem);
             currentInventory = CurrentInventory.Module;
         }
     }
@@ -90,93 +104,55 @@ public class InventorySystem : Singleton<InventorySystem>
     {
         if (currentInventory == CurrentInventory.Module)
         {
-            GenerateWeaponItemUI();
+            itemWorkshopUI.GenerateInventoryItemUI<WeaponInventoryDefinition>(m_WeaponPrefab, ref currInventoryItem);
             currentInventory = CurrentInventory.Weapon;
         }
     }
 
-    void GenerateModuleItemUI() // แยกเพราะมีหัวข้อให้เลือกแสดงข้อมูล แสดงข้อมูลไม่ได้พร้อมกัน
-    {
-        int idx = 0;
-        // int idx2 = 1;
 
-        RefreshItemUI(currInventoryItem);
-        while (idx < playerDatabase.playerModuleInventory.Count)
-        {
-            itemWorkshopUI.GenerateInventoryItemUI<ModuleInventoryDefinition>(InstantiatePrefabItemUI(m_ModulePrefab), idx + 1);
-            idx++;
-        }
-        currInventoryItem = itemWorkshopUI.currInventoryItem;
-
-        // while (idx2 < playerDatabase.playerModuleInventory.Count) 
-        // {
-        //     currInventoryItem.Add(InstantiatePrefabItemUI(m_ModulePrefab));
-        //     idx2++;
-        // }
-        // itemWorkshopUI.GenerateInventoryItemUI<ModuleInventoryDefinition>(currInventoryItem);
-    }
-
-    void GenerateWeaponItemUI()
-    {
-        int idx = 0;
-
-        RefreshItemUI(currInventoryItem);
-        while (idx < playerDatabase.playerWeaponInventroy.Count)
-        {
-            itemWorkshopUI.GenerateInventoryItemUI<WeaponInventoryDefinition>(InstantiatePrefabItemUI(m_ModulePrefab), idx + 1);
-            idx++;
-        }
-        currInventoryItem = itemWorkshopUI.currInventoryItem;
-    }
-
-    void GenerateEquipModuleItemUI() // เอาของ weapon มารวมกันได้เลย
-    {
-        RefreshItemUI(currEquipmentItem);
-        for (int i = 0; i < playerShipConfig.moduleModList.Count; i++)
-        {
-            itemWorkshopUI.GenerateEquipmentItemUI<ModuleInventoryDefinition>(InstantiatePrefabItemUI(m_ModulePrefab), i + 1);
-        }
-        currEquipmentItem = itemWorkshopUI.currEquipmentItem;
-    }
-
+    ///<summary> Dealing with item data and generate ui by equip and unequip </summary>  
     public void EquipModule(int id, ModuleMod mod, ItemBehaviour itemBehaviour) // send data inventory to shipconfig
     {
         currentInventory = CurrentInventory.Module;
-        playerShipConfig.AddModule(id, mod, itemBehaviour);
-        TranferData(id, itemBehaviour);
+        TranferData(id, itemBehaviour, mod);
         RemoveUI(ref currInventoryItem, id);
-        // GenerateModuleItemUI();
-        GenerateEquipModuleItemUI();
+        itemWorkshopUI.GenerateEquipmentItemUI(m_ModulePrefab, m_WeaponPrefab, ref currEquipmentModule, ref currEquipmentWeapon);
         equipModule?.Invoke(); // invoke เพื่อ apply stat จาก statController
     }
 
     public void UnEquipModule(int id, ModuleMod mod, ItemBehaviour itemBehaviour) // send data shipconfig to database
     {
         SelectModule();
-        playerDatabase.AddData(mod);
-        TranferData(id, itemBehaviour);
-        RemoveUI(ref currEquipmentItem, id);
-        GenerateModuleItemUI();
-        unEquipModule(mod, id); // remove stat ด้วย event delgate
+        TranferData(id, itemBehaviour, mod);
+        RemoveUI(ref currEquipmentModule, id);
+        itemWorkshopUI.GenerateInventoryItemUI<ModuleInventoryDefinition>(m_ModulePrefab, ref currInventoryItem);
+        unEquipModule?.Invoke(mod, id); // remove stat ด้วย event delgate
     }
 
-    void RefreshItemUI(List<GameObject> list)
+    public void EquipWeapon(int id, Weapon weapon, ItemBehaviour itemBehaviour, WeaponType weaponType)
     {
-        if (list.Count > 0)
-        {
-            for (int i = 0; i < list.Count; i++)
-            {
-                Destroy(list[i]);
-            }
-            list.Clear();
-        }
+        TranferData(id, itemBehaviour, weapon, weaponType);
+        RemoveUI(ref currInventoryItem, id);
+        itemWorkshopUI.GenerateEquipmentItemUI(m_ModulePrefab, m_WeaponPrefab, ref currEquipmentModule, ref currEquipmentWeapon);
+        equipWeapon?.Invoke();
     }
 
+    public void UnEquipWeapon(int id, Weapon weapon, ItemBehaviour itemBehaviour, WeaponType weaponType)
+    {
+        SelectWeapon();
+        TranferData(id, itemBehaviour, weapon, weaponType);
+        RemoveUI(ref currEquipmentWeapon, id);
+        itemWorkshopUI.GenerateInventoryItemUI<WeaponInventoryDefinition>(m_WeaponPrefab, ref currInventoryItem);
+        unEquipWeapon?.Invoke(weapon, id);
+    }
+
+
+    ///<summary> Utility class </summary>  
     public void RemoveUI(ref List<GameObject> itemList, int id)
     {
         for (int i = 0; i < itemList.Count; i++)
         {
-            ModuleModController controller = itemList[i].GetComponent<ModuleModController>();
+            IItemController controller = itemList[i].GetComponent<IItemController>(); // ใช้ Interface เพราะ weapon, module controller มี id เหมือนกัน
             if (controller.id == id)
             {
                 Destroy(itemList[i]);
@@ -185,28 +161,66 @@ public class InventorySystem : Singleton<InventorySystem>
         }
     }
 
-    void TranferData(int id, ItemBehaviour itemBehaviour) // ย้าย Item object ui ระหว่าง inventory database and shipconfig 
+    void TranferData(int id, ItemBehaviour itemBehaviour, ModuleMod mod) // ย้าย Item object ui ระหว่าง inventory database and shipconfig  ของ Module
     {
         if (itemBehaviour == ItemBehaviour.Equip)
         {
-            playerDatabase.playerModuleInventory = playerDatabase.playerModuleInventory.Where(x => x.id != id).ToList();
-            // GenerateModuleItemUI();
+            playerShipConfig.AddModule(id, mod, itemBehaviour);
+            playerDatabase.playerModuleInventory = playerDatabase.playerModuleInventory.Where(x => x.id != id).ToList(); // ลบข้อมูลตัวที่ถูกเลือกใน Inventory database
         }
         else
         {
-            playerShipConfig.moduleModList = playerShipConfig.moduleModList.Where(x => x.id != id).ToList();
-            // GenerateModuleItemUI();
+            playerDatabase.AddData(mod);
+            playerShipConfig.moduleModList = playerShipConfig.moduleModList.Where(x => x.id != id).ToList(); // ลบข้อมูลตัวที่ถูกเลือกใน player ship config
         }
     }
 
-    public GameObject InstantiatePrefabItemUI(GameObject obj)
+    void TranferData(int id, ItemBehaviour itemBehaviour, Weapon weapon, WeaponType weaponType) // ย้าย Item object ui ระหว่าง inventory database and shipconfig 
     {
-        GameObject newObj = Instantiate(obj);
-        return newObj;
-    }
+        if (itemBehaviour == ItemBehaviour.Equip) // Equip
+        {
+            if (weaponType == WeaponType.Primary)
+            {
+                // playerShipConfig.AddPrimaryWeapon(weapon);
+                if (playerShipConfig.primaryWeapon) // swap weapon
+                {
+                    Weapon temp = playerShipConfig.primaryWeapon;
+                    playerShipConfig.AddPrimaryWeapon(weapon);
+                    playerDatabase.AddData(temp);
 
-    void ResizeToStandard(GameObject obj)
-    {
-        obj.transform.localScale = new Vector3(1, 1, 1);
+
+                    playerDatabase.SwapWeapon(weapon); //มาทำ SwapWeapon function ใน database ต่อ ใช้แทน 2 บรรทัดข้างบน แบบเดิมมีปัญหา id ใน database จะเพิ่มขึ้นเรื่อย ต้องใช้ function ใหม่
+                    itemWorkshopUI.GenerateInventoryItemUI<WeaponInventoryDefinition>(m_WeaponPrefab, ref currInventoryItem);
+                }
+                else // if weapon null
+                {
+                    playerShipConfig.AddPrimaryWeapon(weapon);
+                }
+
+            }
+
+            else if (weaponType == WeaponType.Secondary)
+            {
+                playerShipConfig.AddSecondaryWeapon(weapon);
+            }
+
+            playerDatabase.playerWeaponInventroy = playerDatabase.playerWeaponInventroy.Where(x => x.id != id).ToList(); // ลบข้อมูลตัวที่ถูกเลือกใน Inventory database  
+        }
+        else // UnEquip
+        {
+            if (weaponType == WeaponType.Primary)
+            {
+                // playerDatabase.AddData(weapon);
+                playerShipConfig.primaryWeapon = null;
+            }
+
+            else if (weaponType == WeaponType.Secondary)
+            {
+                // playerDatabase.AddData(weapon);
+                playerShipConfig.secondaryWeapon = null;
+            }
+            playerDatabase.AddData(weapon);
+            // playerShipConfig.moduleModList = playerShipConfig.moduleModList.Where(x => x.id != id).ToList(); // ลบข้อมูลตัวที่ถูกเลือกใน player ship config
+        }
     }
 }
