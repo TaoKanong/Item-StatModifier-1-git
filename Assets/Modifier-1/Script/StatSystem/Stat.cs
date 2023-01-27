@@ -8,6 +8,7 @@ using Object = UnityEngine.Object;
 public class Stat
 {
     protected StatDefinition m_statDefinition;
+    public StatDefinition definition => m_statDefinition;
     protected float m_value;
     public float value => m_value;
     public virtual float baseValue => m_statDefinition.baseValue;
@@ -41,6 +42,12 @@ public class Stat
     public void RemoveModifierByID(int id)
     {
         statModifiers = statModifiers.Where(x => x.id != id).ToList();
+        CalculateValue();
+    }
+
+    public void RemoveWeaponModifierById(int id)
+    {
+        statModifiers = statModifiers.Where(x => x.weaponId != id).ToList();
         CalculateValue();
     }
 
@@ -81,6 +88,7 @@ public class Stat
 
         if (m_value != newValue)
         {
+            newValue = Math.Clamp(newValue, 0, newValue);
             m_value = newValue;
             valueChange?.Invoke(); // ? เช็คว่าเป็น null รึป่าว
         }

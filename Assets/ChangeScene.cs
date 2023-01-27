@@ -15,9 +15,14 @@ public class ChangeScene : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.A))
+        if (Input.GetKeyDown(KeyCode.Keypad1))
         {
             SceneManager.LoadScene(1);
+        }
+
+        if (Input.GetKeyDown(KeyCode.Keypad0))
+        {
+            SceneManager.LoadScene(0);
         }
     }
 }

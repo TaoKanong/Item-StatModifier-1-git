@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEditor;
 using Object = UnityEngine.Object;
 
+[System.Serializable]
 [CreateAssetMenu(menuName = "StatSystem/Module", fileName = "Module", order = 0)]
 public class ModuleMod : ScriptableObject
 {

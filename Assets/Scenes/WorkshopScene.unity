@@ -782,7 +782,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f4dbcd6e53854004abf8adcfe9b1f097, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerDatabase: {fileID: 11400000, guid: caf796a8e54ee3e4283706474d4027fb, type: 2}
+  playerDatabase: {fileID: 11400000, guid: 1fc1eaba7f354bb4e9419b61b8135d32, type: 2}
   playerShipConfig: {fileID: 11400000, guid: 3c66adbef3dbdc94eaaae24b63647ae3, type: 2}
   m_ModulePrefab: {fileID: 8134551888397604308, guid: 65a42e01e4322274aa1ffc1c0dfcf1d9,
     type: 3}
@@ -985,6 +985,51 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 561034700}
   m_CullTransparentMesh: 1
+--- !u!1 &582809813
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 582809815}
+  - component: {fileID: 582809814}
+  m_Layer: 0
+  m_Name: Changescene
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &582809814
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 582809813}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bad1962ea8c905c468ab7117a2d6876c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hint: key code A to change scene
+--- !u!4 &582809815
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 582809813}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 104.53978, y: 185.79373, z: 56.396053}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 6
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &648177796
 GameObject:
   m_ObjectHideFlags: 0
@@ -1201,6 +1246,53 @@ MonoBehaviour:
   m_ShadowLayerMask: 1
   m_LightCookieSize: {x: 1, y: 1}
   m_LightCookieOffset: {x: 0, y: 0}
+--- !u!1 &830704244
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 830704246}
+  - component: {fileID: 830704247}
+  m_Layer: 0
+  m_Name: SaveManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &830704246
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 830704244}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 104.53978, y: 185.79373, z: 56.396053}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 7
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &830704247
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 830704244}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ec6f796a0f561ee43859c3eea3599216, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerDatabase: {fileID: 11400000, guid: 1fc1eaba7f354bb4e9419b61b8135d32, type: 2}
+  playerShipConfig: {fileID: 11400000, guid: 3c66adbef3dbdc94eaaae24b63647ae3, type: 2}
+  json: 
 --- !u!1 &884739521
 GameObject:
   m_ObjectHideFlags: 0
@@ -1805,6 +1897,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1517943387}
   - component: {fileID: 1517943386}
+  - component: {fileID: 1517943388}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -1824,7 +1917,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 53c3731196f4eb74fa9a88d3fd346da8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_StatDatabase: {fileID: 11400000, guid: 8b63035c581f5154f9974932e0dcc3ac, type: 2}
+  m_StatDatabase: {fileID: 11400000, guid: 9add26a24820da34495f6cad85ae6a3f, type: 2}
   m_IsInitialized: 0
   m_PlayerShipConfig: {fileID: 11400000, guid: 3c66adbef3dbdc94eaaae24b63647ae3, type: 2}
 --- !u!4 &1517943387
@@ -1842,6 +1935,22 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1517943388
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1517943385}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6b0c9542a3326764e86e7802ded7a249, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SaveData: {fileID: 11400000, guid: 89c8f3537e8352f469af6dbc3c59fc2a, type: 2}
+  m_SaveDataChannel: {fileID: 11400000, guid: 2c44d8702bc8cc04fba7f8c21e01cd5a, type: 2}
+  m_LoadDataChannel: {fileID: 11400000, guid: 8a58487bffc099f48ac3f1bc87aa4873, type: 2}
+  m_Id: 88355490-a021-4a65-9a51-35ac6d4be18c
 --- !u!1 &1522696252
 GameObject:
   m_ObjectHideFlags: 0

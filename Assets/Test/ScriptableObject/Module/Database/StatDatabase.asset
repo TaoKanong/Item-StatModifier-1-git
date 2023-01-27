@@ -13,17 +13,19 @@ MonoBehaviour:
   m_Name: StatDatabase
   m_EditorClassIdentifier: 
   stat:
-  - {fileID: 11400000, guid: c7cfdb319197e144eadd31ff3d09a801, type: 2}
-  - {fileID: 11400000, guid: 3b569b88354eae34f96e0681e1427698, type: 2}
-  - {fileID: 11400000, guid: 96a7c2dbaf851894ab93d314d28387d0, type: 2}
-  - {fileID: 11400000, guid: 70263c5e64512284a83f167e2e033617, type: 2}
-  - {fileID: 11400000, guid: abfd2e5fdb1cfbd4b9aafd545382e4dc, type: 2}
-  - {fileID: 11400000, guid: 047e39ff1cd75b34db544d7827147758, type: 2}
-  - {fileID: 11400000, guid: 592fe6ea350c56642bc80e92514edef6, type: 2}
-  - {fileID: 11400000, guid: 776123ad7ab31a7488a74137499d2543, type: 2}
-  - {fileID: 11400000, guid: 3ebf95ec65c65c942bdb17fb0dd44af7, type: 2}
   - {fileID: 11400000, guid: e24328ad87c032142a6b1505630d6f8c, type: 2}
+  - {fileID: 11400000, guid: 3ebf95ec65c65c942bdb17fb0dd44af7, type: 2}
+  - {fileID: 11400000, guid: abfd2e5fdb1cfbd4b9aafd545382e4dc, type: 2}
+  - {fileID: 11400000, guid: 592fe6ea350c56642bc80e92514edef6, type: 2}
+  - {fileID: 11400000, guid: 047e39ff1cd75b34db544d7827147758, type: 2}
   - {fileID: 11400000, guid: 7276457120a65e747a8ebc54ad550a3f, type: 2}
+  - {fileID: 11400000, guid: 776123ad7ab31a7488a74137499d2543, type: 2}
   - {fileID: 11400000, guid: 628aa018748ef474aa353a7ec85ae017, type: 2}
-  attributes: []
+  attributes:
+  - {fileID: 11400000, guid: 3b569b88354eae34f96e0681e1427698, type: 2}
+  - {fileID: 11400000, guid: 70263c5e64512284a83f167e2e033617, type: 2}
+  - {fileID: 11400000, guid: c7cfdb319197e144eadd31ff3d09a801, type: 2}
+  - {fileID: 11400000, guid: d3a27edc0a2f39e4db661bcb27542e5e, type: 2}
+  - {fileID: 11400000, guid: 96a7c2dbaf851894ab93d314d28387d0, type: 2}
+  - {fileID: 11400000, guid: dcf3e01a08eaa0e4eb56854801c2bdf1, type: 2}
   primaryStats: []

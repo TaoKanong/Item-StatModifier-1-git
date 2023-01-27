@@ -9,8 +9,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e8cc15b1a3a5f85478edfbaf07b82d75, type: 3}
-  m_Name: Magazine
+  m_Script: {fileID: 11500000, guid: 863ef51dbc2e6324d8c0dfec403518f5, type: 3}
+  m_Name: LoadDataChannel
   m_EditorClassIdentifier: 
-  m_BaseValue: 30
-  m_Cap: -1

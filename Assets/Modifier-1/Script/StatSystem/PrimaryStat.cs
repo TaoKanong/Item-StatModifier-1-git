@@ -1,10 +1,11 @@
 using System.Collections;
+using System;
 using System.Runtime.CompilerServices;
 using System.Collections.Generic;
 using UnityEngine;
 
 [assembly: InternalsVisibleTo("StatSystem.Tests")]
-public class PrimaryStat : Stat
+public class PrimaryStat : Stat//, ISavable
 {
     private float m_BaseValue;
     public override float baseValue => m_BaseValue;
@@ -26,4 +27,25 @@ public class PrimaryStat : Stat
         m_BaseValue -= amount;
         CalculateValue();
     }
+
+    // # region Stat system
+
+    // public object data => new PrimaryStatData
+    // {
+    //     baseValue = baseValue
+    // };
+    // public void Load(object data)
+    // {
+    //     PrimaryStatData primaryStatData = (PrimaryStatData)data;
+    //     m_BaseValue = primaryStatData.baseValue;
+    //     CalculateValue();
+    // }
+
+    // [Serializable]
+    // protected class PrimaryStatData
+    // {
+    //     public float baseValue;
+    // }
+
+    // # endregion
 }

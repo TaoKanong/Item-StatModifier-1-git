@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b7be01412e5aa884a897a31ddc1d1059, type: 3}
+  m_Name: SaveData
+  m_EditorClassIdentifier: 
+  m_LoadDataChannel: {fileID: 11400000, guid: 8a58487bffc099f48ac3f1bc87aa4873, type: 2}
+  m_SaveDataChannel: {fileID: 11400000, guid: 2c44d8702bc8cc04fba7f8c21e01cd5a, type: 2}
+  fileName: MyGame
+  m_Path: C:/Users/jarukitchan/AppData/LocalLow/DefaultCompany/StatModifier-1MyGame

@@ -10,10 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 27c5f435f0680ab47888859bc5aa7f30, type: 3}
-  m_Name: Module-basic
+  m_Name: Module-Ultra
   m_EditorClassIdentifier: 
   stat:
-  - statDefinition: {fileID: 11400000, guid: 3ebf95ec65c65c942bdb17fb0dd44af7, type: 2}
-    magnitude: 5
-  - statDefinition: {fileID: 11400000, guid: 3b569b88354eae34f96e0681e1427698, type: 2}
-    magnitude: 15
+  - statDefinition: {fileID: 11400000, guid: abfd2e5fdb1cfbd4b9aafd545382e4dc, type: 2}
+    magnitude: 20
+  - statDefinition: {fileID: 11400000, guid: 592fe6ea350c56642bc80e92514edef6, type: 2}
+    magnitude: 10
+  - statDefinition: {fileID: 11400000, guid: 70263c5e64512284a83f167e2e033617, type: 2}
+    magnitude: 2

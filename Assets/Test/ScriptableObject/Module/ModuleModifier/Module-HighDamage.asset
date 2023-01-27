@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Module-HighDamage
   m_EditorClassIdentifier: 
   stat:
-  - statDefinition: {fileID: 11400000, guid: e33916afcf6288f4da2964a571ef148b, type: 2}
+  - statDefinition: {fileID: 11400000, guid: 3ebf95ec65c65c942bdb17fb0dd44af7, type: 2}
     magnitude: 20
-  - statDefinition: {fileID: 11400000, guid: 6b633db5ff314384fa23bcfb97523209, type: 2}
+  - statDefinition: {fileID: 11400000, guid: 7276457120a65e747a8ebc54ad550a3f, type: 2}
     magnitude: 10

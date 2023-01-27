@@ -2,12 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[System.Serializable]
 public enum WeaponType
 {
     Primary,
     Secondary
 }
 
+[System.Serializable]
 [CreateAssetMenu(menuName = "StatSystem/Weapon", fileName = "Weapon", order = 0)]
 public class Weapon : ScriptableObject
 {

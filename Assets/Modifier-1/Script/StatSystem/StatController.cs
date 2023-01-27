@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
-public class StatController : Singleton<StatController>
+public class StatController : Singleton<StatController>//, ISavable
 {
     [SerializeField] private StatDatabase m_StatDatabase;
     [SerializeField] Dictionary<string, Stat> m_Stats = new Dictionary<string, Stat>(StringComparer.OrdinalIgnoreCase);
@@ -57,14 +57,24 @@ public class StatController : Singleton<StatController>
 
     private void OnEnable()
     {
-        InventorySystem.Instance.equipModule += ApplyStatModule;
-        InventorySystem.Instance.unEquipModule += RemoveStatModule;
+        if (InventorySystem.Instance != null)
+        {
+            InventorySystem.Instance.equipItem += ApplyStatModule;
+            InventorySystem.Instance.unEquipModule += RemoveStatModule;
+
+            InventorySystem.Instance.unEquipWeapon += RemoveStatWeapon;
+        }
     }
 
     private void OnDisable()
     {
-        InventorySystem.Instance.equipModule -= ApplyStatModule;
-        InventorySystem.Instance.unEquipModule -= RemoveStatModule;
+        if (InventorySystem.Instance != null)
+        {
+            InventorySystem.Instance.equipItem -= ApplyStatModule;
+            InventorySystem.Instance.unEquipModule -= RemoveStatModule;
+
+            InventorySystem.Instance.unEquipWeapon -= RemoveStatWeapon;
+        }
     }
 
     void Start()
@@ -113,6 +123,61 @@ public class StatController : Singleton<StatController>
                 }
             }
         }
+
+        if (playerShipConfig.primaryWeapon != null)
+        {
+            foreach (WeaponStatDefinition weapon in playerShipConfig.primaryWeapon.statList)
+            {
+                string statName = weapon.statName;
+                float magnitude = weapon.magnitude;
+
+                foreach (KeyValuePair<string, Stat> pair in stats) // ใช้ใน ModuleMod ตัว Module mod จะให้ใส่ Stat scriptableObject ลงไป อยากเพิ่มตัวไหนก็ใส่ลงไป 
+                {
+                    // Debug.Log("stats");
+                    string key = pair.Key;
+                    Stat stat = stats[key];
+
+                    if (statName == pair.Key)
+                    {
+                        stat.AddModifier(new StatModifier
+                        {
+                            weaponId = 0,
+                            magnitude = magnitude,
+                            Type = ModifierOperationType.Additive
+                        });
+                        break;
+                    }
+                }
+            }
+        }
+
+        if (playerShipConfig.secondaryWeapon != null)
+        {
+            foreach (WeaponStatDefinition weapon in playerShipConfig.secondaryWeapon.statList)
+            {
+                string statName = weapon.statName;
+                float magnitude = weapon.magnitude;
+
+                foreach (KeyValuePair<string, Stat> pair in stats) // ใช้ใน ModuleMod ตัว Module mod จะให้ใส่ Stat scriptableObject ลงไป อยากเพิ่มตัวไหนก็ใส่ลงไป 
+                {
+                    // Debug.Log("stats");
+                    string key = pair.Key;
+                    Stat stat = stats[key];
+
+                    if (statName == pair.Key)
+                    {
+                        stat.AddModifier(new StatModifier
+                        {
+                            weaponId = 1,
+                            magnitude = magnitude,
+                            Type = ModifierOperationType.Additive
+                        });
+                        break;
+                    }
+                }
+            }
+        }
+
     }
 
     public void RemoveStatModule(ModuleMod moduleMod, int id)
@@ -135,6 +200,23 @@ public class StatController : Singleton<StatController>
         }
     }
 
+    public void RemoveStatWeapon(Weapon weapon, int weaponId)
+    {
+        foreach (WeaponStatDefinition weaponStat in weapon.statList)
+        {
+            foreach (KeyValuePair<string, Stat> pair in stats)
+            {
+                string key = pair.Key;
+                Stat stat = stats[key];
+
+                if (key == weaponStat.statName)
+                {
+                    stat.RemoveWeaponModifierById(weaponId);
+                }
+            }
+        }
+    }
+
     void OnGUI()
     {
         GUI.color = Color.green;
@@ -142,9 +224,9 @@ public class StatController : Singleton<StatController>
         foreach (KeyValuePair<string, Stat> pair in stats)
         {
             GUI.Label(
-                new Rect(25, spacing, 200, 20),
+                new Rect(170, spacing, 200, 20),
                 pair.Key + " " + stats[pair.Key].value);
-            spacing += 15;
+            spacing += 20;
         }
         // GUI.Label(
         //     new Rect(125, 0, 200, 20),
@@ -154,4 +236,44 @@ public class StatController : Singleton<StatController>
         //     new Rect(125, 15, 200, 20),
         //     "SecondaryDamage: " + stats["SecondaryDamage"].value);
     }
+
+    // # region Stat system
+
+    // public object data
+    // {
+    //     get
+    //     {
+    //         Dictionary<string, object> stats = new Dictionary<string, object>();
+    //         foreach (Stat stat in m_Stats.Values)
+    //         {
+    //             if (stat is ISavable savable)
+    //             {
+    //                 stats.Add(stat.definition.name, savable.data);
+    //             }
+    //         }
+    //         return new StatControllerData
+    //         {
+    //             stats = stats
+    //         };
+    //     }
+    // }
+    // public void Load(object data)
+    // {
+    //     StatControllerData statControllerData = (StatControllerData)data;
+    //     foreach (Stat stat in m_Stats.Values)
+    //     {
+    //         if (stat is ISavable savable)
+    //         {
+    //             savable.Load(statControllerData.stats[stat.definition.name]);
+    //         }
+    //     }
+    // }
+
+    // [Serializable]
+    // protected class StatControllerData
+    // {
+    //     public Dictionary<string, object> stats;
+    // }
+
+    // # endregion
 }

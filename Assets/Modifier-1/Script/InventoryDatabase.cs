@@ -3,6 +3,7 @@ using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
 
+[System.Serializable]
 [CreateAssetMenu(menuName = "StatSystem/InventoryDatabase", fileName = "InventoryDatabase", order = 0)]
 public class InventoryDatabase : ScriptableObject
 {
@@ -43,6 +44,49 @@ public class InventoryDatabase : ScriptableObject
         }
         else
         {
+
+            WeaponInventoryDefinition lastElement = playerWeaponInventroy.Last();
+            int newId = lastElement.id + 1;
+
+            playerWeaponInventroy.Add(new WeaponInventoryDefinition
+            {
+                id = newId,
+                weapon = newWeapon
+            });
+        }
+    }
+
+    public void ReArrangeItemID()
+    {
+        int resetWeaponId = 0;
+        int resetModuleId = 0;
+
+        foreach (WeaponInventoryDefinition weapon in playerWeaponInventroy)
+        {
+
+            weapon.id = resetWeaponId;
+            resetWeaponId++;
+        }
+
+        foreach (ModuleInventoryDefinition mod in playerModuleInventory)
+        {
+            mod.id = resetModuleId;
+            resetModuleId++;
+        }
+    }
+
+    public void SwapWeapon(Weapon newWeapon)
+    {
+        if (playerWeaponInventroy.Count == 0)
+        {
+            playerWeaponInventroy.Add(new WeaponInventoryDefinition
+            {
+                id = 0,
+                weapon = newWeapon
+            });
+        }
+        else
+        {
             WeaponInventoryDefinition lastElement = playerWeaponInventroy.Last();
             int newId = lastElement.id + 1;
 
@@ -55,10 +99,14 @@ public class InventoryDatabase : ScriptableObject
         }
     }
 
-    public void SwapWeapon(Weapon newWeapon)
-    {
+    // private void OnApplicationQuit() // save data when app closed
+    // {
+    //     PlayerPrefs.SetString("playerShipConfig", JsonUtility.ToJson(this));
+    //     PlayerPrefs.SetString("playerModuleInventory", JsonUtility.ToJson(playerModuleInventory));
+    //     PlayerPrefs.SetString("playerWeaponInventroy", JsonUtility.ToJson(playerWeaponInventroy));
 
-    }
+    //     PlayerPrefs.Save();
+    // }
 }
 
 [System.Serializable]
