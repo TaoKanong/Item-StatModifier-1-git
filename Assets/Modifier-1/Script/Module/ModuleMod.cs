@@ -11,7 +11,7 @@ public class ModuleMod : ScriptableObject
     [Header("Module StatModifier")]
     [Space(20)]
     public List<StatForModule> stat;
-    // public Sprite icon;  // ทำ 3 อันนี้เพิ่มภายหลัง
+    public Sprite icon;  // ทำ 3 อันนี้เพิ่มภายหลัง
     // public string detail;
     // public Rarerity 
 }

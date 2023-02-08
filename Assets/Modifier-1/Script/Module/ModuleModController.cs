@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 // public enum ItemCategory
 // {
@@ -23,10 +24,13 @@ public class ModuleModController : MonoBehaviour, IItemController
     [SerializeField] int Id; // for show only
     public ModuleMod mod;
     public ItemBehaviour itemBehaviour;
+    public Sprite icon;
+    public Image image;
 
     void Start()
     {
         Id = id;
+        image.sprite = icon;
     }
 
     void Update()
@@ -39,6 +43,7 @@ public class ModuleModController : MonoBehaviour, IItemController
         if (itemBehaviour == ItemBehaviour.Equip) // Equip to PlayerConfig
         {
             InventorySystem.Instance.EquipModule(id, mod, itemBehaviour);
+
             // draw ui to PlayerShipConfig
             // move module to playerShipConfig and remove module from database
             // set ItemBehaviour to remove

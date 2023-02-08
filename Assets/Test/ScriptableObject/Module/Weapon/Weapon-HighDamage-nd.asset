@@ -23,3 +23,4 @@ MonoBehaviour:
   soundEffect: {fileID: 0}
   ammoConsume: 0
   weaponType: 1
+  icon: {fileID: 21300000, guid: da62c759f0958624b919c06875125d39, type: 3}

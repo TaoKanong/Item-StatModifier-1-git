@@ -42,6 +42,7 @@ public class ItemWorkshopUI
                 moduleModController.mod = mod.mod;
                 moduleModController.id = mod.id;
                 moduleModController.itemBehaviour = ItemBehaviour.Equip;
+                moduleModController.icon = mod.mod.icon;
 
                 newGameObject.transform.SetParent(m_PositionUI["InventoryUI"].transform, m_PositionUI["InventoryUI"].transform.parent);
                 ResizeToStandard(newGameObject);
@@ -60,6 +61,7 @@ public class ItemWorkshopUI
                 weaponController.id = weapon.id;
                 weaponController.itemBehaviour = ItemBehaviour.Equip;
                 weaponController.weaponType = weapon.weapon.weaponType;
+                weaponController.icon = weapon.weapon.icon;
 
                 newGameObject.transform.SetParent(m_PositionUI["InventoryUI"].transform, m_PositionUI["InventoryUI"].transform.parent);
                 ResizeToStandard(newGameObject);
@@ -82,6 +84,7 @@ public class ItemWorkshopUI
             moduleModController.mod = mod.mod;
             moduleModController.id = mod.id;
             moduleModController.itemBehaviour = ItemBehaviour.Remove;
+            moduleModController.icon = mod.mod.icon;
 
             newGameObject.transform.SetParent(m_PositionUI["ModuleEquipmentUI"].transform, m_PositionUI["ModuleEquipmentUI"].transform.parent);
             ResizeToStandard(newGameObject);
@@ -100,6 +103,7 @@ public class ItemWorkshopUI
             primaryWeaponProperties.id = 0;
             primaryWeaponProperties.weaponType = playerShipConfig.primaryWeapon.weaponType;
             primaryWeaponProperties.itemBehaviour = ItemBehaviour.Remove;
+            primaryWeaponProperties.icon = playerShipConfig.primaryWeapon.icon;
 
             primaryWeaponUI.transform.SetParent(m_PositionUI["PrimaryEquipUI"].transform, m_PositionUI["PrimaryEquipUI"].transform.parent);
             ResizeToStandard(primaryWeaponUI);
@@ -116,6 +120,7 @@ public class ItemWorkshopUI
             secondaryWeaponProperties.id = 1;
             secondaryWeaponProperties.weaponType = playerShipConfig.secondaryWeapon.weaponType;
             secondaryWeaponProperties.itemBehaviour = ItemBehaviour.Remove;
+            secondaryWeaponProperties.icon = playerShipConfig.secondaryWeapon.icon;
 
             secondaryWeaponUI.transform.SetParent(m_PositionUI["SecondaryEquipUI "].transform, m_PositionUI["SecondaryEquipUI "].transform.parent);
             ResizeToStandard(secondaryWeaponUI);

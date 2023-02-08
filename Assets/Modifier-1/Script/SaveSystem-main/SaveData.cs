@@ -53,42 +53,17 @@ public class SaveData : MonoBehaviour
 
     private void OnApplicationQuit()
     {
-        // //Save
-        // var obj = ScriptableObject.CreateInstance<InventoryDatabase>();
-        // obj = playerDatabase;
-        // var json = JsonUtility.ToJson(obj);
-        // Debug.Log(json);
-
-        // SerializationManager.SaveDataToBinary("playerDatabase", json); // item scriptable object
-
         Save<InventoryDatabase>("playerDatabase", playerDatabase);
         Save<PlayerShipConfig>("playerShipConfig", playerShipConfig);
-
-        // var database = ScriptableObject.CreateInstance<InventoryDatabase>();
-        // var module = ScriptableObject.CreateInstance<ModuleMod>();
-
-        // database = playerDatabase;
-        // var json = JsonUtility.ToJson(playerDatabase);
-        // Debug.Log(json);
-
-        // SerializationManager.SaveDataToBinary("playerDatabase", json); // item scriptable object
     }
 
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.Q))
         {
+            //Force save for build 
             Save<InventoryDatabase>("playerDatabase", playerDatabase);
             Save<PlayerShipConfig>("playerShipConfig", playerShipConfig);
-
-            // var database = ScriptableObject.CreateInstance<InventoryDatabase>();
-            // var module = ScriptableObject.CreateInstance<ModuleMod>();
-
-            // database = playerDatabase;
-            // var json = JsonUtility.ToJson(playerDatabase);
-            // Debug.Log(json);
-
-            // SerializationManager.SaveDataToBinary("playerDatabase", json); // item scriptable object
         }
 
         if (Input.GetKeyDown(KeyCode.E))
@@ -122,6 +97,14 @@ public class SaveData : MonoBehaviour
             SerializationManager.SaveDataToBinary(saveName, json); // item scriptable object
         }
 
+        // //Save
+        // var obj = ScriptableObject.CreateInstance<T>();
+        // obj = data;
+        // var json = JsonUtility.ToJson(obj);
+        // Debug.Log(json);
+
+        // SerializationManager.SaveDataToBinary(saveName, json); // item scriptable object
+
     }
 
     void Load<T>(string saveName, T data) where T : ScriptableObject
@@ -139,5 +122,9 @@ public class SaveData : MonoBehaviour
 
             JsonUtility.FromJsonOverwrite(json, data);
         }
+
+        // json = (string)SerializationManager.LoadDataFromBinary(Application.persistentDataPath + "/saves/" + saveName + ".save");
+
+        // JsonUtility.FromJsonOverwrite(json, data);
     }
 }

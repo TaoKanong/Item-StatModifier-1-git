@@ -20,6 +20,7 @@ public class Weapon : ScriptableObject
     public GameObject soundEffect;
     public float ammoConsume;
     public WeaponType weaponType;
+    public Sprite icon;
 
 }
 

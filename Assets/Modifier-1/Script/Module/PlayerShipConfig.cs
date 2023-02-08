@@ -62,4 +62,11 @@ public class PlayerShipConfig : ScriptableObject
     {
 
     }
+
+    public void ClearItem()
+    {
+        moduleModList.Clear();
+        primaryWeapon = null;
+        secondaryWeapon = null;
+    }
 }

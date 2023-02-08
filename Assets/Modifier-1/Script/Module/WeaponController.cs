@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class WeaponController : MonoBehaviour, IItemController
 {
@@ -10,9 +11,15 @@ public class WeaponController : MonoBehaviour, IItemController
     public Weapon weapon;
     public WeaponType weaponType;
     public ItemBehaviour itemBehaviour;
+    public Sprite icon;
+    public Image image;
     void Start()
     {
         Id = id;
+        if (icon != null)
+        {
+            image.sprite = icon;
+        }
     }
 
     // Update is called once per frame

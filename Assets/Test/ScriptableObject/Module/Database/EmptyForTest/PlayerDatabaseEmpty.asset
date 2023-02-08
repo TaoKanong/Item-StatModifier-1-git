@@ -12,5 +12,29 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ccae8a4aee9aa5947a57dd3cf15a9830, type: 3}
   m_Name: PlayerDatabaseEmpty
   m_EditorClassIdentifier: 
-  playerModuleInventory: []
-  playerWeaponInventroy: []
+  playerModuleInventory:
+  - id: 0
+    mod: {fileID: 11400000, guid: 358f090122d8a61488cfe6333ea53373, type: 2}
+    itemBehaviour: 0
+  - id: 1
+    mod: {fileID: 11400000, guid: 12c71ba459a495b4ca8ea726c6d181b1, type: 2}
+    itemBehaviour: 0
+  - id: 2
+    mod: {fileID: 11400000, guid: 12c71ba459a495b4ca8ea726c6d181b1, type: 2}
+    itemBehaviour: 0
+  playerWeaponInventroy:
+  - id: 0
+    weapon: {fileID: 11400000, guid: 2ab2caae2fce40e4691f1539b24f4961, type: 2}
+    itemBehaviour: 0
+  - id: 1
+    weapon: {fileID: 11400000, guid: ed6f2d1d13d5edc479e8d6e229a4e44b, type: 2}
+    itemBehaviour: 0
+  - id: 2
+    weapon: {fileID: 11400000, guid: 2ab2caae2fce40e4691f1539b24f4961, type: 2}
+    itemBehaviour: 0
+  - id: 3
+    weapon: {fileID: 11400000, guid: 90aa829c86b37d847ac8e5816242e4d3, type: 2}
+    itemBehaviour: 0
+  - id: 4
+    weapon: {fileID: 11400000, guid: 90aa829c86b37d847ac8e5816242e4d3, type: 2}
+    itemBehaviour: 0

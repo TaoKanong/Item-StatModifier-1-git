@@ -75,38 +75,11 @@ public class InventoryDatabase : ScriptableObject
         }
     }
 
-    public void SwapWeapon(Weapon newWeapon)
+    public void ClearItem()
     {
-        if (playerWeaponInventroy.Count == 0)
-        {
-            playerWeaponInventroy.Add(new WeaponInventoryDefinition
-            {
-                id = 0,
-                weapon = newWeapon
-            });
-        }
-        else
-        {
-            WeaponInventoryDefinition lastElement = playerWeaponInventroy.Last();
-            int newId = lastElement.id + 1;
-
-            playerWeaponInventroy.Add(new WeaponInventoryDefinition
-            {
-                id = newId,
-                weapon = newWeapon
-            });
-            // item behavior จะถูก set ที่ ItemWorkshopUI ตอนที่ถูก instantiate ขึ้นมา
-        }
+        playerModuleInventory.Clear();
+        playerWeaponInventroy.Clear();
     }
-
-    // private void OnApplicationQuit() // save data when app closed
-    // {
-    //     PlayerPrefs.SetString("playerShipConfig", JsonUtility.ToJson(this));
-    //     PlayerPrefs.SetString("playerModuleInventory", JsonUtility.ToJson(playerModuleInventory));
-    //     PlayerPrefs.SetString("playerWeaponInventroy", JsonUtility.ToJson(playerWeaponInventroy));
-
-    //     PlayerPrefs.Save();
-    // }
 }
 
 [System.Serializable]

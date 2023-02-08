@@ -50,13 +50,9 @@ public class InventorySystem : Singleton<InventorySystem>
     public event RemoveStatWeapon unEquipWeapon;
     private ItemWorkshopUI itemWorkshopUI;
     private bool isInitialized;
+
     protected override void Awake()
     {
-        // SaveData.current = (SaveData)Serialization.Load(Application.persistentDataPath + "/saves/save.save");
-        // if (SaveData.current.playerDatabase != null)
-        // {
-        //     playerDatabase = SaveData.current.playerDatabase;
-        // }
         base.Awake();
     }
     void Start()
@@ -66,56 +62,8 @@ public class InventorySystem : Singleton<InventorySystem>
 
     void Initialize()
     {
-        // load data
-
-        // playerDatabase.playerModuleInventory = JsonUtility.FromJson<List<ModuleInventoryDefinition>>(PlayerPrefs.GetString("playerModuleInventory"));
-        // playerDatabase.playerWeaponInventroy = JsonUtility.FromJson<List<WeaponInventoryDefinition>>(PlayerPrefs.GetString("playerWeaponInventroy"));
-
-        // playerShipConfig.primaryWeapon = JsonUtility.FromJson<Weapon>(PlayerPrefs.GetString("primaryWeapon"));
-        // playerShipConfig.secondaryWeapon = JsonUtility.FromJson<Weapon>(PlayerPrefs.GetString("secondaryWeapon"));
-        // playerShipConfig.moduleModList = JsonUtility.FromJson<List<ModuleInventoryDefinition>>(PlayerPrefs.GetString("moduleModList"));
-
-        // new PlayerDataHandler().LoadData();
-
-        // PlayerPrefs.SetString("playerShipConfig", JsonUtility.ToJson(playerShipConfig));
-        // PlayerShipConfig test = JsonUtility.FromJson<PlayerShipConfig>(PlayerPrefs.GetString("playerShipConfig"));
-        // if (test.primaryWeapon != null)
-        // {
-        //     Debug.Log("not null");
-        // }
-
-        // InventoryDatabase data = ScriptableObject.CreateInstance<InventoryDatabase>();
-        // data = playerDatabase;
-
-        // PlayerPrefs.SetString("playerModuleInventory", JsonUtility.ToJson(data));
-        // PlayerPrefs.Save();
-
-        // InventoryDatabase test = JsonUtility.FromJson<InventoryDatabase>(PlayerPrefs.GetString("playerModuleInventory"));
-
-        // List<ModuleInventoryDefinition> test = JsonUtility.FromJson<List<ModuleInventoryDefinition>>(PlayerPrefs.GetString("playerModuleInventory"));
-
-        // PlayerPrefs.SetString("playerModuleInventory", JsonUtility.ToJson(data.playerModuleInventory));
-        // ModuleInventoryDefinition test = JsonUtility.FromJson<ModuleInventoryDefinition>(PlayerPrefs.GetString("playerModuleInventory"));
-
-        // if (test != null)
-        // {
-        //     Debug.Log(test);
-        // }
-
-        // PlayerPrefs.SetString("playerModuleInventory", JsonUtility.ToJson(playerDatabase.playerModuleInventory)); // chai dai
-        // var test = JsonUtility.FromJson<List<ModuleInventoryDefinition>>(PlayerPrefs.GetString("playerModuleInventory"));
-
-        // if (test != null)
-        // {
-        //     Debug.Log("not null");
-        // }
-
-        // if (PlayerPrefs.HasKey("playerModuleInventory")) // ใช้ไม่ได้ทั้ง playmode, build app เหมือนตัว save จะมีปัญหา
-        // {
-        //     new PlayerDataHandler().LoadData(playerDatabase, playerShipConfig);
-        // }
-
-
+        // var tests = new ItemWorkshopUI(playerDatabase, playerShipConfig, m_Postion);
+        // tests.GenerateEquipmentItemUI
         itemWorkshopUI = new ItemWorkshopUI(playerDatabase, playerShipConfig, m_Postion);
         itemWorkshopUI.GenerateInventoryItemUI<ModuleInventoryDefinition>(m_ModulePrefab, ref currInventoryItem);
         itemWorkshopUI.GenerateEquipmentItemUI(m_ModulePrefab, m_WeaponPrefab, ref currEquipmentModule, ref currEquipmentWeapon);
@@ -123,32 +71,10 @@ public class InventorySystem : Singleton<InventorySystem>
         playerDatabase.ReArrangeItemID();
     }
 
-    // private void OnApplicationQuit()
-    // {
-    //     new PlayerDataHandler().SaveData(playerDatabase, playerShipConfig);
-    // }
-
     // Update is called once per frame
     void Update()
     {
-        // if (Input.GetKeyDown(KeyCode.S))
-        // {
-        //     SaveData.current.playerDatabase = playerDatabase;
-        //     Serialization.Save("save", SaveData.current);
-        //     Debug.Log("save");
-        // }
 
-        // if (Input.GetKeyDown(KeyCode.W))
-        // {
-        //     SaveData.current = (SaveData)Serialization.Load(Application.persistentDataPath + "/saves/save.save");
-        //     playerDatabase = SaveData.current.playerDatabase;
-        //     Debug.Log("load");
-        // }
-
-        // if (Input.GetKeyDown(KeyCode.D))
-        // {
-
-        // }
     }
 
     ///<summary> Add test item data for database </summary>  
@@ -162,8 +88,14 @@ public class InventorySystem : Singleton<InventorySystem>
     public void AddItem(Weapon item)
     {
         playerDatabase.AddData(item);
-        itemWorkshopUI.GenerateInventoryItemUI<ModuleInventoryDefinition>(m_ModulePrefab, ref currInventoryItem);
+        itemWorkshopUI.GenerateInventoryItemUI<WeaponInventoryDefinition>(m_WeaponPrefab, ref currInventoryItem);
         currentInventory = CurrentInventory.Weapon;
+    }
+
+    public void ClearItem()
+    {
+        playerDatabase.ClearItem();
+        playerShipConfig.ClearItem();
     }
 
     ///<summary> 
