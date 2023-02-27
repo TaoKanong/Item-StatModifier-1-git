@@ -9,6 +9,9 @@ public class StatController : Singleton<StatController>//, ISavable
     [SerializeField] private StatDatabase m_StatDatabase;
     [SerializeField] Dictionary<string, Stat> m_Stats = new Dictionary<string, Stat>(StringComparer.OrdinalIgnoreCase);
     public Dictionary<string, Stat> stats => m_Stats;
+
+    // Dictionary<string, Stat> m_BaseStats = new Dictionary<string, Stat>(StringComparer.OrdinalIgnoreCase);
+    public Dictionary<string, Stat> baseStats = new Dictionary<string, Stat>(StringComparer.OrdinalIgnoreCase);
     [SerializeField] private bool m_IsInitialized;
     public bool isInitialized => m_IsInitialized;
     public event Action initialized;
@@ -39,20 +42,21 @@ public class StatController : Singleton<StatController>//, ISavable
         foreach (StatDefinition definition in m_StatDatabase.stat)
         {
             m_Stats.Add(definition.name, new Stat(definition));
+            baseStats.Add(definition.name, new Stat(definition));
         }
 
         foreach (StatDefinition definition in m_StatDatabase.attributes)
         {
             m_Stats.Add(definition.name, new Attribute(definition));
+            baseStats.Add(definition.name, new Attribute(definition));
         }
 
         foreach (StatDefinition definition in m_StatDatabase.primaryStats)
         {
             m_Stats.Add(definition.name, new PrimaryStat(definition));
+            baseStats.Add(definition.name, new PrimaryStat(definition));
         }
-
         ApplyStatModule();
-
     }
 
     private void OnEnable()
@@ -224,20 +228,13 @@ public class StatController : Singleton<StatController>//, ISavable
         foreach (KeyValuePair<string, Stat> pair in stats)
         {
             GUI.Label(
-                new Rect(170, spacing, 200, 20),
+                new Rect(850, spacing, 200, 20),
                 pair.Key + " " + stats[pair.Key].value);
             spacing += 20;
         }
-        // GUI.Label(
-        //     new Rect(125, 0, 200, 20),
-        //     "PrimaryDamage: " + stats["PrimaryDamage"].value);
-
-        // GUI.Label(
-        //     new Rect(125, 15, 200, 20),
-        //     "SecondaryDamage: " + stats["SecondaryDamage"].value);
     }
 
-    // # region Stat system
+    // # region Stat system // เก็บไว้ลอง
 
     // public object data
     // {

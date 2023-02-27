@@ -11,6 +11,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/WorkshopScene.unity
     guid: ed139c06f46898b428c68b54924148a0
+  - enabled: 1
+    path: Assets/Scenes/In-gameScene.unity
+    guid: ab080db5618755a46915a4477a95de51
   - enabled: 0
     path: Assets/Test/Scene/Test.unity
     guid: 77037cf2fe033be41bf1c10db84c09a7

@@ -10,13 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 27c5f435f0680ab47888859bc5aa7f30, type: 3}
-  m_Name: Module-HighDamage
+  m_Name: Module-RecordTest-1
   m_EditorClassIdentifier: 
   stat:
-  - statDefinition: {fileID: 11400000, guid: 3ebf95ec65c65c942bdb17fb0dd44af7, type: 2}
-    magnitude: 20
-  - statDefinition: {fileID: 11400000, guid: 7276457120a65e747a8ebc54ad550a3f, type: 2}
-    magnitude: 10
   - statDefinition: {fileID: 11400000, guid: e24328ad87c032142a6b1505630d6f8c, type: 2}
-    magnitude: 15
+    magnitude: 250
+  - statDefinition: {fileID: 11400000, guid: 047e39ff1cd75b34db544d7827147758, type: 2}
+    magnitude: 250
+  - statDefinition: {fileID: 11400000, guid: 70263c5e64512284a83f167e2e033617, type: 2}
+    magnitude: 250
   icon: {fileID: 21300000, guid: 29673bbdfa85975438baea39820b3638, type: 3}

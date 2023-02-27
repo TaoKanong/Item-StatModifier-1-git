@@ -43,6 +43,7 @@ public class InventorySystem : Singleton<InventorySystem>
     public List<GameObject> currEquipmentWeapon = new List<GameObject>();
     public CurrentInventory currentInventory; // item topic => module, weapon
     public event Action equipItem;
+    public event Action unEquipItem; // for Update various ui
     public delegate void RemoveStatModule(ModuleMod moduleMod, int id); // ใช้กับ Statcontroller remove stat module
     public event RemoveStatModule unEquipModule;
     // public event Action equipWeapon;
@@ -138,6 +139,7 @@ public class InventorySystem : Singleton<InventorySystem>
         RemoveUI(ref currEquipmentModule, id);
         itemWorkshopUI.GenerateInventoryItemUI<ModuleInventoryDefinition>(m_ModulePrefab, ref currInventoryItem);
         unEquipModule?.Invoke(mod, id); // remove stat ด้วย event delgate
+        unEquipItem?.Invoke();
     }
 
     public void EquipWeapon(int id, Weapon weapon, ItemBehaviour itemBehaviour, WeaponType weaponType)
@@ -159,6 +161,7 @@ public class InventorySystem : Singleton<InventorySystem>
         itemWorkshopUI.GenerateInventoryItemUI<WeaponInventoryDefinition>(m_WeaponPrefab, ref currInventoryItem);
         itemWorkshopUI.GenerateEquipmentItemUI(m_ModulePrefab, m_WeaponPrefab, ref currEquipmentModule, ref currEquipmentWeapon);
         unEquipWeapon?.Invoke(weapon, id);
+        unEquipItem?.Invoke();
     }
 
 

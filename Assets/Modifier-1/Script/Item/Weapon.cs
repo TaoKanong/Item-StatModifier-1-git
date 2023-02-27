@@ -31,3 +31,16 @@ public class WeaponStatDefinition
     public string statName => stat.name;
     public float magnitude;
 }
+
+
+[System.Serializable]
+[CreateAssetMenu(menuName = "StatSystem/WeaponTest", fileName = "WeaponTest", order = 0)]
+public class WeaponTest : ModuleMod
+{
+    public GameObject bulletPrefab;
+    public GameObject hitPrefab;
+    public GameObject flashPrefab;
+    public GameObject soundEffect;
+    public float ammoConsume;
+    public WeaponType weaponType;
+}

@@ -8,22 +8,26 @@ public class TooltipTrigger : MonoBehaviour, IPointerEnterHandler, IPointerExitH
     private ModuleModController moduleModController;
     private List<StatForModule> modStat;
     private WeaponController weaponController;
-    private string itemName;
+    private string _itemName;
+    private List<string> statName;
+    ModuleMod moddd;
+    WeaponTest wewe;
 
     // Start is called before the first frame update
     void Start()
     {
+
         if (this.gameObject.name == "Module-Basic(Clone)")
         {
             // Debug.Log(this.gameObject.name);
             moduleModController = GetComponent<ModuleModController>();
-            itemName = moduleModController.mod.name;
+            _itemName = moduleModController.mod.name;
             modStat = moduleModController.mod.stat;
         }
         else if (this.gameObject.name == "Weapon-Basic(Clone)")
         {
             weaponController = GetComponent<WeaponController>();
-            itemName = weaponController.weapon.name;
+            _itemName = weaponController.weapon.name;
         }
     }
 
@@ -35,7 +39,7 @@ public class TooltipTrigger : MonoBehaviour, IPointerEnterHandler, IPointerExitH
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        TooltipSystem.Instance.Show(itemName, "Test Detail");
+        TooltipSystem.Instance.Show(_itemName, "Test Detail");
     }
 
     public void OnPointerExit(PointerEventData eventData)

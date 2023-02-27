@@ -15,6 +15,7 @@ public class TooltipSystem : MonoBehaviour
     public void Show(string itemName, string detail)
     {
         tooltip.SetText(itemName, "Test detail");
+        tooltip.SetPosition();
         tooltip.gameObject.SetActive(true);
     }
 

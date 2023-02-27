@@ -25,4 +25,19 @@ public class ChangeScene : MonoBehaviour
             SceneManager.LoadScene(0);
         }
     }
+
+    public void WorkShopMenu()
+    {
+        SceneManager.LoadScene(1);
+    }
+
+    public void StartGameMenu()
+    {
+        SceneManager.LoadScene(2);
+    }
+
+    public void MainMenu()
+    {
+        SceneManager.LoadScene(0);
+    }
 }
